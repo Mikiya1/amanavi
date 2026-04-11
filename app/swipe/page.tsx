@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, Suspense } from 'react'
+import { useState, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 
@@ -201,95 +201,80 @@ function SwipeContent() {
   const [done, setDone] = useState(false)
   const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
-  const cardRef = useRef<HTMLDivElement>(null)
-  const stateRef = useRef({ animating: false, startX: 0, startY: 0, dragging: false })
+  const dragStart = useRef<{ x: number; y: number } | null>(null)
+  const isDragging = useRef(false)
 
   const current = items[index]
   const next = items[index + 1]
   const nextNext = items[index + 2]
 
-  const handleSwipe = (dir: 'left' | 'right', currentTags: string[], currentIndex: number) => {
-    stateRef.current.animating = true
-    stateRef.current.dragging = false
+  const handleSwipe = (dir: 'left' | 'right') => {
+    if (animating) return
     setDragOffset({ x: 0, y: 0 })
     setAnimating(dir)
-    const newTags = dir === 'right' ? [...currentTags, ...items[currentIndex].tags] : currentTags
+    const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
     if (dir === 'right') setLikedTags(newTags)
     setTimeout(() => {
-      stateRef.current.animating = false
       setAnimating(null)
-      if (currentIndex + 1 >= items.length) setDone(true)
-      else setIndex(currentIndex + 1)
+      if (index + 1 >= items.length) setDone(true)
+      else setIndex(prev => prev + 1)
     }, 320)
   }
 
-  useEffect(() => {
-    const el = cardRef.current
-    if (!el) return
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (animating) return
+    const t = e.touches[0]
+    dragStart.current = { x: t.clientX, y: t.clientY }
+    isDragging.current = true
+  }
 
-    const onTouchStart = (e: TouchEvent) => {
-      if (stateRef.current.animating) return
-      stateRef.current.dragging = true
-      stateRef.current.startX = e.touches[0].clientX
-      stateRef.current.startY = e.touches[0].clientY
-    }
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current || !dragStart.current || animating) return
+    const t = e.touches[0]
+    setDragOffset({
+      x: t.clientX - dragStart.current.x,
+      y: t.clientY - dragStart.current.y,
+    })
+  }
 
-    const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault()
-      if (!stateRef.current.dragging || stateRef.current.animating) return
-      setDragOffset({
-        x: e.touches[0].clientX - stateRef.current.startX,
-        y: e.touches[0].clientY - stateRef.current.startY,
-      })
-    }
+  const onTouchEnd = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    const { x } = dragOffset
+    if (x > 80) handleSwipe('right')
+    else if (x < -80) handleSwipe('left')
+    else setDragOffset({ x: 0, y: 0 })
+    dragStart.current = null
+  }
 
-    const onTouchEnd = () => {
-      if (!stateRef.current.dragging) return
-      stateRef.current.dragging = false
-      setDragOffset(prev => {
-        if (prev.x > 80) {
-          setLikedTags(tags => {
-            setIndex(i => {
-              handleSwipe('right', tags, i)
-              return i
-            })
-            return tags
-          })
-        } else if (prev.x < -80) {
-          setLikedTags(tags => {
-            setIndex(i => {
-              handleSwipe('left', tags, i)
-              return i
-            })
-            return tags
-          })
-        } else {
-          return { x: 0, y: 0 }
-        }
-        return prev
-      })
-    }
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (animating) return
+    dragStart.current = { x: e.clientX, y: e.clientY }
+    isDragging.current = true
+  }
 
-    el.addEventListener('touchstart', onTouchStart, { passive: true })
-    el.addEventListener('touchmove', onTouchMove, { passive: false })
-    el.addEventListener('touchend', onTouchEnd)
-    return () => {
-      el.removeEventListener('touchstart', onTouchStart)
-      el.removeEventListener('touchmove', onTouchMove)
-      el.removeEventListener('touchend', onTouchEnd)
-    }
-  }, [items])
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !dragStart.current || animating) return
+    setDragOffset({
+      x: e.clientX - dragStart.current.x,
+      y: e.clientY - dragStart.current.y,
+    })
+  }
 
-  // ボタン用
-  const doSwipe = (dir: 'left' | 'right') => {
-    if (stateRef.current.animating) return
-    handleSwipe(dir, likedTags, index)
+  const onMouseUp = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    const { x } = dragOffset
+    if (x > 80) handleSwipe('right')
+    else if (x < -80) handleSwipe('left')
+    else setDragOffset({ x: 0, y: 0 })
+    dragStart.current = null
   }
 
   const getCardTransform = () => {
     if (animating === 'right') return 'translateX(130%) rotate(20deg)'
     if (animating === 'left') return 'translateX(-130%) rotate(-20deg)'
-    if (dragOffset.x !== 0 || dragOffset.y !== 0) {
+    if (isDragging.current || (dragOffset.x !== 0 || dragOffset.y !== 0)) {
       const rotate = dragOffset.x * 0.08
       return `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${rotate}deg)`
     }
@@ -361,13 +346,19 @@ function SwipeContent() {
           )}
 
           <div
-            ref={cardRef}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
             style={{
               position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
               transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+              cursor: 'grab',
               userSelect: 'none',
-              touchAction: 'none',
             }}
           >
             <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
@@ -410,11 +401,11 @@ function SwipeContent() {
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <button
-            onClick={() => doSwipe('left')}
+            onClick={() => handleSwipe('left')}
             style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1.5px solid #444', background: '#1C1C1E', fontSize: '26px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >✕</button>
           <button
-            onClick={() => doSwipe('right')}
+            onClick={() => handleSwipe('right')}
             style={{ width: '72px', height: '72px', borderRadius: '50%', border: '2px solid #FF9500', background: '#FF9500', fontSize: '28px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(255,149,0,0.4)' }}
           >♥</button>
         </div>
@@ -427,5 +418,9 @@ function SwipeContent() {
 }
 
 export default function SwipePage() {
-  return <SwipeContent />
+  return (
+    <Suspense>
+      <SwipeContent />
+    </Suspense>
+  )
 }
