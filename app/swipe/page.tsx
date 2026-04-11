@@ -225,8 +225,9 @@ function SwipeContent() {
     }, 320)
   }
 
-  const onTouchStart = (e: React.TouchEvent) => {
+const onTouchStart = (e: React.TouchEvent) => {
     if (animating) return
+    e.preventDefault()
     const t = e.touches[0]
     dragStart.current = { x: t.clientX, y: t.clientY }
     isDragging.current = true
