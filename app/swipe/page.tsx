@@ -232,8 +232,9 @@ function SwipeContent() {
     isDragging.current = true
   }
 
-  const onTouchMove = (e: React.TouchEvent) => {
+const onTouchMove = (e: React.TouchEvent) => {
     if (!isDragging.current || !dragStart.current || animating) return
+    const t = e.touches[0]
     setDragOffset({
       x: t.clientX - dragStart.current.x,
       y: t.clientY - dragStart.current.y,
