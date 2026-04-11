@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, Suspense } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 
@@ -202,11 +202,28 @@ function SwipeContent() {
   const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const dragStart = useRef<{ x: number; y: number } | null>(null)
-  const isDragging = useRef(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const current = items[index]
   const next = items[index + 1]
   const nextNext = items[index + 2]
+
+  // touchmoveをpassive:falseで登録（スクロール防止）
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+    const handler = (e: TouchEvent) => {
+      e.preventDefault()
+      if (!dragStart.current) return
+      const t = e.touches[0]
+      setDragOffset({
+        x: t.clientX - dragStart.current.x,
+        y: t.clientY - dragStart.current.y,
+      })
+    }
+    el.addEventListener('touchmove', handler, { passive: false })
+    return () => el.removeEventListener('touchmove', handler)
+  }, [index])
 
   const handleSwipe = (dir: 'left' | 'right') => {
     if (animating) return
@@ -214,38 +231,20 @@ function SwipeContent() {
     setAnimating(dir)
     const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
     if (dir === 'right') setLikedTags(newTags)
-
     setTimeout(() => {
       setAnimating(null)
-      if (index + 1 >= items.length) {
-        setDone(true)
-      } else {
-        setIndex(prev => prev + 1)
-      }
+      if (index + 1 >= items.length) setDone(true)
+      else setIndex(prev => prev + 1)
     }, 320)
   }
 
-const onTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
     if (animating) return
-    e.preventDefault()
     const t = e.touches[0]
     dragStart.current = { x: t.clientX, y: t.clientY }
-    isDragging.current = true
-  }
-
-const onTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || !dragStart.current || animating) return
-    e.preventDefault()
-    const t = e.touches[0]
-    setDragOffset({
-      x: t.clientX - dragStart.current.x,
-      y: t.clientY - dragStart.current.y,
-    })
   }
 
   const onTouchEnd = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
     const { x } = dragOffset
     if (x > 80) handleSwipe('right')
     else if (x < -80) handleSwipe('left')
@@ -256,11 +255,10 @@ const onTouchMove = (e: React.TouchEvent) => {
   const onMouseDown = (e: React.MouseEvent) => {
     if (animating) return
     dragStart.current = { x: e.clientX, y: e.clientY }
-    isDragging.current = true
   }
 
   const onMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !dragStart.current || animating) return
+    if (!dragStart.current || animating) return
     setDragOffset({
       x: e.clientX - dragStart.current.x,
       y: e.clientY - dragStart.current.y,
@@ -268,8 +266,7 @@ const onTouchMove = (e: React.TouchEvent) => {
   }
 
   const onMouseUp = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
+    if (!dragStart.current) return
     const { x } = dragOffset
     if (x > 80) handleSwipe('right')
     else if (x < -80) handleSwipe('left')
@@ -351,19 +348,14 @@ const onTouchMove = (e: React.TouchEvent) => {
             <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.95) translateY(8px)', zIndex: 1 }} />
           )}
 
-         <div
+          <div
+            ref={cardRef}
             onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
             onMouseDown={onMouseDown}
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
-            ref={(el) => {
-              if (el) {
-                el.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false })
-              }
-            }}
             style={{
               position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
@@ -374,7 +366,6 @@ const onTouchMove = (e: React.TouchEvent) => {
           >
             <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
               {current.emoji}
-
               {showLike && (
                 <div style={{
                   position: 'absolute', top: '24px', left: '20px',
