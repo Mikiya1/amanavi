@@ -201,26 +201,25 @@ function SwipeContent() {
   const [done, setDone] = useState(false)
   const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
-  const dragStart = useRef<{ x: number; y: number } | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
-  const animatingRef = useRef(false)
+  const stateRef = useRef({ animating: false, startX: 0, startY: 0, dragging: false })
 
   const current = items[index]
   const next = items[index + 1]
   const nextNext = items[index + 2]
 
-  const handleSwipe = (dir: 'left' | 'right') => {
-    if (animatingRef.current) return
-    animatingRef.current = true
+  const handleSwipe = (dir: 'left' | 'right', currentTags: string[], currentIndex: number) => {
+    stateRef.current.animating = true
+    stateRef.current.dragging = false
     setDragOffset({ x: 0, y: 0 })
     setAnimating(dir)
-    const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
+    const newTags = dir === 'right' ? [...currentTags, ...items[currentIndex].tags] : currentTags
     if (dir === 'right') setLikedTags(newTags)
     setTimeout(() => {
-      animatingRef.current = false
+      stateRef.current.animating = false
       setAnimating(null)
-      if (index + 1 >= items.length) setDone(true)
-      else setIndex(prev => prev + 1)
+      if (currentIndex + 1 >= items.length) setDone(true)
+      else setIndex(currentIndex + 1)
     }, 320)
   }
 
@@ -228,66 +227,63 @@ function SwipeContent() {
     const el = cardRef.current
     if (!el) return
 
-    const onStart = (e: TouchEvent) => {
-      if (animatingRef.current) return
-      const t = e.touches[0]
-      dragStart.current = { x: t.clientX, y: t.clientY }
+    const onTouchStart = (e: TouchEvent) => {
+      if (stateRef.current.animating) return
+      stateRef.current.dragging = true
+      stateRef.current.startX = e.touches[0].clientX
+      stateRef.current.startY = e.touches[0].clientY
     }
 
-    const onMove = (e: TouchEvent) => {
+    const onTouchMove = (e: TouchEvent) => {
       e.preventDefault()
-      if (!dragStart.current || animatingRef.current) return
-      const t = e.touches[0]
+      if (!stateRef.current.dragging || stateRef.current.animating) return
       setDragOffset({
-        x: t.clientX - dragStart.current.x,
-        y: t.clientY - dragStart.current.y,
+        x: e.touches[0].clientX - stateRef.current.startX,
+        y: e.touches[0].clientY - stateRef.current.startY,
       })
     }
 
-    const onEnd = () => {
-      if (!dragStart.current) return
+    const onTouchEnd = () => {
+      if (!stateRef.current.dragging) return
+      stateRef.current.dragging = false
       setDragOffset(prev => {
-        if (prev.x > 80) handleSwipe('right')
-        else if (prev.x < -80) handleSwipe('left')
-        else {
-          dragStart.current = null
+        if (prev.x > 80) {
+          setLikedTags(tags => {
+            setIndex(i => {
+              handleSwipe('right', tags, i)
+              return i
+            })
+            return tags
+          })
+        } else if (prev.x < -80) {
+          setLikedTags(tags => {
+            setIndex(i => {
+              handleSwipe('left', tags, i)
+              return i
+            })
+            return tags
+          })
+        } else {
           return { x: 0, y: 0 }
         }
-        dragStart.current = null
         return prev
       })
     }
 
-    el.addEventListener('touchstart', onStart, { passive: true })
-    el.addEventListener('touchmove', onMove, { passive: false })
-    el.addEventListener('touchend', onEnd)
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    el.addEventListener('touchend', onTouchEnd)
     return () => {
-      el.removeEventListener('touchstart', onStart)
-      el.removeEventListener('touchmove', onMove)
-      el.removeEventListener('touchend', onEnd)
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+      el.removeEventListener('touchend', onTouchEnd)
     }
-  }, [index, likedTags])
+  }, [items])
 
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (animatingRef.current) return
-    dragStart.current = { x: e.clientX, y: e.clientY }
-  }
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!dragStart.current || animatingRef.current) return
-    setDragOffset({
-      x: e.clientX - dragStart.current.x,
-      y: e.clientY - dragStart.current.y,
-    })
-  }
-
-  const onMouseUp = () => {
-    if (!dragStart.current) return
-    const { x } = dragOffset
-    if (x > 80) handleSwipe('right')
-    else if (x < -80) handleSwipe('left')
-    else setDragOffset({ x: 0, y: 0 })
-    dragStart.current = null
+  // ボタン用
+  const doSwipe = (dir: 'left' | 'right') => {
+    if (stateRef.current.animating) return
+    handleSwipe(dir, likedTags, index)
   }
 
   const getCardTransform = () => {
@@ -366,16 +362,12 @@ function SwipeContent() {
 
           <div
             ref={cardRef}
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
             style={{
               position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
               transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
-              cursor: 'grab',
               userSelect: 'none',
+              touchAction: 'none',
             }}
           >
             <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
@@ -409,7 +401,7 @@ function SwipeContent() {
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px' }}>
                 {current.tags.map(tag => (
-                  <span key={tag} style={{ background: '#2a2a2a', color: '#ccc', fontSize: '12px', padding: '4px 10px', borderRadius: '20px' }}>{tag}</span>
+                  <span key={tag} style={{ background: '#333', color: '#ccc', fontSize: '12px', padding: '4px 10px', borderRadius: '20px' }}>{tag}</span>
                 ))}
               </div>
             </div>
@@ -418,11 +410,11 @@ function SwipeContent() {
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <button
-            onClick={() => handleSwipe('left')}
+            onClick={() => doSwipe('left')}
             style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1.5px solid #444', background: '#1C1C1E', fontSize: '26px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >✕</button>
           <button
-            onClick={() => handleSwipe('right')}
+            onClick={() => doSwipe('right')}
             style={{ width: '72px', height: '72px', borderRadius: '50%', border: '2px solid #FF9500', background: '#FF9500', fontSize: '28px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(255,149,0,0.4)' }}
           >♥</button>
         </div>
