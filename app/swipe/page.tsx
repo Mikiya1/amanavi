@@ -427,9 +427,5 @@ function SwipeContent() {
 }
 
 export default function SwipePage() {
-  return (
-    <Suspense>
-      <SwipeContent />
-    </Suspense>
-  )
+  return <SwipeContent />
 }
