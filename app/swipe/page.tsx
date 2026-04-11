@@ -234,6 +234,7 @@ function SwipeContent() {
 
 const onTouchMove = (e: React.TouchEvent) => {
     if (!isDragging.current || !dragStart.current || animating) return
+    e.preventDefault()
     const t = e.touches[0]
     setDragOffset({
       x: t.clientX - dragStart.current.x,
@@ -349,7 +350,7 @@ const onTouchMove = (e: React.TouchEvent) => {
             <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.95) translateY(8px)', zIndex: 1 }} />
           )}
 
-          <div
+         <div
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -357,6 +358,11 @@ const onTouchMove = (e: React.TouchEvent) => {
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
+            ref={(el) => {
+              if (el) {
+                el.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false })
+              }
+            }}
             style={{
               position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
