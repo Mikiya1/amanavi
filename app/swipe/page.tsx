@@ -203,62 +203,78 @@ function SwipeContent() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const dragStart = useRef<{ x: number; y: number } | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+  const animatingRef = useRef(false)
 
   const current = items[index]
   const next = items[index + 1]
   const nextNext = items[index + 2]
 
-  // touchmoveをpassive:falseで登録（スクロール防止）
-  useEffect(() => {
-    const el = cardRef.current
-    if (!el) return
-    const handler = (e: TouchEvent) => {
-      e.preventDefault()
-      if (!dragStart.current) return
-      const t = e.touches[0]
-      setDragOffset({
-        x: t.clientX - dragStart.current.x,
-        y: t.clientY - dragStart.current.y,
-      })
-    }
-    el.addEventListener('touchmove', handler, { passive: false })
-    return () => el.removeEventListener('touchmove', handler)
-  }, [index])
-
   const handleSwipe = (dir: 'left' | 'right') => {
-    if (animating) return
+    if (animatingRef.current) return
+    animatingRef.current = true
     setDragOffset({ x: 0, y: 0 })
     setAnimating(dir)
     const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
     if (dir === 'right') setLikedTags(newTags)
     setTimeout(() => {
+      animatingRef.current = false
       setAnimating(null)
       if (index + 1 >= items.length) setDone(true)
       else setIndex(prev => prev + 1)
     }, 320)
   }
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    if (animating) return
-    const t = e.touches[0]
-    dragStart.current = { x: t.clientX, y: t.clientY }
-  }
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
 
-  const onTouchEnd = () => {
-    const { x } = dragOffset
-    if (x > 80) handleSwipe('right')
-    else if (x < -80) handleSwipe('left')
-    else setDragOffset({ x: 0, y: 0 })
-    dragStart.current = null
-  }
+    const onStart = (e: TouchEvent) => {
+      if (animatingRef.current) return
+      const t = e.touches[0]
+      dragStart.current = { x: t.clientX, y: t.clientY }
+    }
+
+    const onMove = (e: TouchEvent) => {
+      e.preventDefault()
+      if (!dragStart.current || animatingRef.current) return
+      const t = e.touches[0]
+      setDragOffset({
+        x: t.clientX - dragStart.current.x,
+        y: t.clientY - dragStart.current.y,
+      })
+    }
+
+    const onEnd = () => {
+      if (!dragStart.current) return
+      setDragOffset(prev => {
+        if (prev.x > 80) handleSwipe('right')
+        else if (prev.x < -80) handleSwipe('left')
+        else {
+          dragStart.current = null
+          return { x: 0, y: 0 }
+        }
+        dragStart.current = null
+        return prev
+      })
+    }
+
+    el.addEventListener('touchstart', onStart, { passive: true })
+    el.addEventListener('touchmove', onMove, { passive: false })
+    el.addEventListener('touchend', onEnd)
+    return () => {
+      el.removeEventListener('touchstart', onStart)
+      el.removeEventListener('touchmove', onMove)
+      el.removeEventListener('touchend', onEnd)
+    }
+  }, [index, likedTags])
 
   const onMouseDown = (e: React.MouseEvent) => {
-    if (animating) return
+    if (animatingRef.current) return
     dragStart.current = { x: e.clientX, y: e.clientY }
   }
 
   const onMouseMove = (e: React.MouseEvent) => {
-    if (!dragStart.current || animating) return
+    if (!dragStart.current || animatingRef.current) return
     setDragOffset({
       x: e.clientX - dragStart.current.x,
       y: e.clientY - dragStart.current.y,
@@ -350,8 +366,6 @@ function SwipeContent() {
 
           <div
             ref={cardRef}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
             onMouseDown={onMouseDown}
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
