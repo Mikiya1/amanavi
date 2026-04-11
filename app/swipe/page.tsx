@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 
@@ -200,12 +200,17 @@ function SwipeContent() {
   const [likedTags, setLikedTags] = useState<string[]>([])
   const [done, setDone] = useState(false)
   const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const dragStart = useRef<{ x: number; y: number } | null>(null)
+  const isDragging = useRef(false)
 
   const current = items[index]
   const next = items[index + 1]
+  const nextNext = items[index + 2]
 
   const handleSwipe = (dir: 'left' | 'right') => {
     if (animating) return
+    setDragOffset({ x: 0, y: 0 })
     setAnimating(dir)
     const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
     if (dir === 'right') setLikedTags(newTags)
@@ -217,14 +222,70 @@ function SwipeContent() {
       } else {
         setIndex(prev => prev + 1)
       }
-    }, 280)
+    }, 320)
+  }
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (animating) return
+    const t = e.touches[0]
+    dragStart.current = { x: t.clientX, y: t.clientY }
+    isDragging.current = true
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current || !dragStart.current || animating) return
+    setDragOffset({
+      x: t.clientX - dragStart.current.x,
+      y: t.clientY - dragStart.current.y,
+    })
+  }
+
+  const onTouchEnd = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    const { x } = dragOffset
+    if (x > 80) handleSwipe('right')
+    else if (x < -80) handleSwipe('left')
+    else setDragOffset({ x: 0, y: 0 })
+    dragStart.current = null
+  }
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (animating) return
+    dragStart.current = { x: e.clientX, y: e.clientY }
+    isDragging.current = true
+  }
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !dragStart.current || animating) return
+    setDragOffset({
+      x: e.clientX - dragStart.current.x,
+      y: e.clientY - dragStart.current.y,
+    })
+  }
+
+  const onMouseUp = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    const { x } = dragOffset
+    if (x > 80) handleSwipe('right')
+    else if (x < -80) handleSwipe('left')
+    else setDragOffset({ x: 0, y: 0 })
+    dragStart.current = null
   }
 
   const getCardTransform = () => {
-    if (animating === 'right') return 'translateX(120%) rotate(15deg)'
-    if (animating === 'left') return 'translateX(-120%) rotate(-15deg)'
+    if (animating === 'right') return 'translateX(130%) rotate(20deg)'
+    if (animating === 'left') return 'translateX(-130%) rotate(-20deg)'
+    if (dragOffset.x !== 0 || dragOffset.y !== 0) {
+      const rotate = dragOffset.x * 0.08
+      return `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${rotate}deg)`
+    }
     return 'none'
   }
+
+  const showLike = animating === 'right' || dragOffset.x > 40
+  const showNope = animating === 'left' || dragOffset.x < -40
 
   if (done) {
     return (
@@ -280,18 +341,53 @@ function SwipeContent() {
         </div>
 
         <div style={{ width: '100%', position: 'relative', height: '380px', marginBottom: '24px' }}>
-          {next && (
-            <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.95) translateY(8px)', zIndex: 0 }} />
+          {nextNext && (
+            <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.90) translateY(16px)', zIndex: 0 }} />
           )}
-          <div style={{
-            position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 1,
-            transform: getCardTransform(),
-            transition: animating ? 'transform 0.28s ease' : 'none',
-          }}>
-            <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px' }}>
+          {next && (
+            <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.95) translateY(8px)', zIndex: 1 }} />
+          )}
+
+          <div
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            style={{
+              position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
+              transform: getCardTransform(),
+              transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
+              cursor: 'grab',
+              userSelect: 'none',
+            }}
+          >
+            <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
               {current.emoji}
+
+              {showLike && (
+                <div style={{
+                  position: 'absolute', top: '24px', left: '20px',
+                  border: '3px solid #4CD964', borderRadius: '8px', padding: '6px 16px',
+                  transform: 'rotate(-15deg)', color: '#4CD964',
+                  fontSize: '28px', fontWeight: '800', letterSpacing: '2px',
+                  opacity: Math.min(1, Math.abs(dragOffset.x) / 80),
+                }}>LIKE</div>
+              )}
+              {showNope && (
+                <div style={{
+                  position: 'absolute', top: '24px', right: '20px',
+                  border: '3px solid #FF3B30', borderRadius: '8px', padding: '6px 16px',
+                  transform: 'rotate(15deg)', color: '#FF3B30',
+                  fontSize: '28px', fontWeight: '800', letterSpacing: '2px',
+                  opacity: Math.min(1, Math.abs(dragOffset.x) / 80),
+                }}>NOPE</div>
+              )}
             </div>
-            <div style={{ padding: '20px' }}>
+
+            <div style={{ padding: '20px', pointerEvents: 'none' }}>
               <div style={{ fontSize: '20px', fontWeight: '600' }}>{current.name}</div>
               <div style={{ color: '#FF9500', fontSize: '18px', marginTop: '4px', fontWeight: '700' }}>{current.price}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
@@ -300,9 +396,7 @@ function SwipeContent() {
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px' }}>
                 {current.tags.map(tag => (
-                  <span key={tag} style={{ background: '#2a2a2a', color: '#ccc', fontSize: '12px', padding: '4px 10px', borderRadius: '20px' }}>
-                    {tag}
-                  </span>
+                  <span key={tag} style={{ background: '#2a2a2a', color: '#ccc', fontSize: '12px', padding: '4px 10px', borderRadius: '20px' }}>{tag}</span>
                 ))}
               </div>
             </div>
@@ -313,15 +407,11 @@ function SwipeContent() {
           <button
             onClick={() => handleSwipe('left')}
             style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1.5px solid #444', background: '#1C1C1E', fontSize: '26px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            ✕
-          </button>
+          >✕</button>
           <button
             onClick={() => handleSwipe('right')}
             style={{ width: '72px', height: '72px', borderRadius: '50%', border: '2px solid #FF9500', background: '#FF9500', fontSize: '28px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(255,149,0,0.4)' }}
-          >
-            ♥
-          </button>
+          >♥</button>
         </div>
 
         <div style={{ marginTop: '16px', fontSize: '12px', color: '#444' }}>← 興味なし ／ 気になる →</div>

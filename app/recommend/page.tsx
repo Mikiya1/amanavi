@@ -21,9 +21,9 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Lenovo Tab P12', price: '¥54,800', rating: '4.4', emoji: '📲', tags: ['大画面', 'Android', 'コスパ'], url: 'https://amazon.co.jp' },
   ],
   'イヤホン': [
-    { id: 1, name: 'AirPods Pro 2', price: '¥39,800', rating: '4.8', emoji: '🎧', tags: ['Apple', 'ノイキャン', '空間音響'], url: 'https://amazon.co.jp' },
-    { id: 2, name: 'Sony WF-1000XM5', price: '¥38,500', rating: '4.8', emoji: '🎧', tags: ['Sony', 'ノイキャン', '高音質'], url: 'https://amazon.co.jp' },
-    { id: 3, name: 'Anker Soundcore P40i', price: '¥5,990', rating: '4.6', emoji: '🎧', tags: ['コスパ', 'ノイキャン', 'Anker'], url: 'https://amazon.co.jp' },
+    { id: 1, name: 'AirPods Pro 2', price: '¥39,800', rating: '4.8', emoji: '🎧', tags: ['Apple', 'ノイキャン', '空間音響'], url: 'https://amzn.to/3NXDwSu' },
+    { id: 2, name: 'Sony WF-1000XM5', price: '¥38,500', rating: '4.8', emoji: '🎧', tags: ['Sony', 'ノイキャン', '高音質'], url: 'https://amzn.to/4cge82q' },
+    { id: 3, name: 'Anker Soundcore P40i', price: '¥5,990', rating: '4.6', emoji: '🎧', tags: ['コスパ', 'ノイキャン', 'Anker'], url: 'https://amzn.to/3OyWHCd' },
     { id: 4, name: 'Nothing Ear 2', price: '¥22,800', rating: '4.5', emoji: '🎧', tags: ['デザイン', '高音質', 'おしゃれ'], url: 'https://amazon.co.jp' },
     { id: 5, name: 'Bose QuietComfort', price: '¥29,800', rating: '4.7', emoji: '🎧', tags: ['Bose', 'ノイキャン', '快適'], url: 'https://amazon.co.jp' },
   ],
@@ -211,41 +211,41 @@ function RecommendContent() {
   return (
     <>
       <Header />
-      <main style={{ background: '#0F0F0F', minHeight: '100vh', color: '#fff', fontFamily: 'sans-serif', padding: '24px 20px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', padding: '16px', maxWidth: '480px', margin: '0 auto' }}>
 
-        <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '12px' }}>おすすめ商品</h2>
+        <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>おすすめ商品</h2>
 
-        <div style={{ background: '#1C1C1E', borderRadius: '12px', padding: '10px 14px', fontSize: '13px', color: '#aaa', borderLeft: '3px solid #FF9500', marginBottom: '24px' }}>
+        <div style={{ background: '#FFF3CD', border: '1px solid #FF9900', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: '#0F1111', marginBottom: '16px' }}>
           💡 {reason}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
           {scored.map((item, i) => (
-            <div key={item.id} style={{ background: '#1C1C1E', borderRadius: '16px', overflow: 'hidden', border: i === 0 ? '1px solid #FF9500' : '1px solid transparent', position: 'relative' }}>
+            <div key={item.id} style={{ background: '#ffffff', borderRadius: '8px', overflow: 'hidden', border: i === 0 ? '2px solid #FF9900' : '1px solid #DDD', position: 'relative' }}>
               {i === 0 && (
-                <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 2, background: '#FF9500', color: '#fff', fontSize: '10px', padding: '3px 10px', borderRadius: '6px', fontWeight: '600' }}>
-                  BEST MATCH
+                <div style={{ background: '#FF9900', color: '#fff', fontSize: '11px', padding: '3px 10px', fontWeight: '700', textAlign: 'center' }}>
+                  ★ ベストマッチ
                 </div>
               )}
               <div style={{ display: 'flex', alignItems: 'stretch' }}>
-                <div style={{ width: '100px', minHeight: '100px', background: '#2a2a2a', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
+                <div style={{ width: '100px', minHeight: '100px', background: '#F3F3F3', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
                   {item.emoji}
                 </div>
-                <div style={{ flex: 1, padding: '14px', minWidth: 0 }}>
-                  <div style={{ fontSize: '14px', fontWeight: '600', lineHeight: 1.4 }}>{item.name}</div>
-                  <div style={{ fontSize: '16px', color: '#FF9500', marginTop: '4px', fontWeight: '700' }}>{item.price}</div>
+                <div style={{ flex: 1, padding: '12px', minWidth: 0 }}>
+                  <div style={{ fontSize: '14px', fontWeight: '700', lineHeight: 1.4, color: '#0F1111' }}>{item.name}</div>
+                  <div style={{ fontSize: '18px', color: '#B12704', marginTop: '4px', fontWeight: '700' }}>{item.price}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                    <span style={{ color: '#FFD60A', fontSize: '12px' }}>★</span>
-                    <span style={{ fontSize: '12px', color: '#888' }}>{item.rating}</span>
+                    <span style={{ color: '#FF9900', fontSize: '12px' }}>★</span>
+                    <span style={{ fontSize: '12px', color: '#565959' }}>{item.rating}</span>
                   </div>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
+                  <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
                     {item.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: '11px', color: '#888', background: '#2a2a2a', padding: '3px 10px', borderRadius: '20px' }}>{tag}</span>
+                      <span key={tag} style={{ fontSize: '11px', color: '#565959', background: '#F3F3F3', padding: '2px 8px', borderRadius: '4px', border: '1px solid #DDD' }}>{tag}</span>
                     ))}
                   </div>
                   <button
                     onClick={() => window.open(item.url, '_blank')}
-                    style={{ display: 'inline-block', marginTop: '10px', background: '#FF9500', color: '#fff', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                    style={{ marginTop: '8px', background: '#FFD814', color: '#0F1111', border: 'none', borderRadius: '4px', padding: '6px 16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', width: '100%' }}
                   >
                     Amazonで見る
                   </button>
@@ -257,7 +257,7 @@ function RecommendContent() {
 
         <button
           onClick={() => router.push('/genre')}
-          style={{ width: '100%', background: 'transparent', color: '#888', border: '1px solid #333', borderRadius: '16px', padding: '14px', fontSize: '15px', cursor: 'pointer' }}
+          style={{ width: '100%', background: '#ffffff', color: '#0F1111', border: '1px solid #DDD', borderRadius: '8px', padding: '12px', fontSize: '14px', cursor: 'pointer', fontWeight: '700' }}
         >
           もう一度診断する
         </button>
