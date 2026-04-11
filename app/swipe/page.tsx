@@ -359,6 +359,7 @@ function SwipeContent() {
               transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
               cursor: 'grab',
               userSelect: 'none',
+              touchAction: 'none',
             }}
           >
             <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
