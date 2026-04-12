@@ -346,13 +346,39 @@ function SwipeContent() {
           )}
 
           <div
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
             onMouseDown={onMouseDown}
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseUp}
+            ref={(el) => {
+              if (!el) return
+              el.ontouchstart = (e) => {
+                if (animating) return
+                const t = e.touches[0]
+                dragStart.current = { x: t.clientX, y: t.clientY }
+                isDragging.current = true
+              }
+              el.ontouchmove = (e) => {
+                e.preventDefault()
+                if (!isDragging.current || !dragStart.current || animating) return
+                const t = e.touches[0]
+                setDragOffset({
+                  x: t.clientX - dragStart.current.x,
+                  y: t.clientY - dragStart.current.y,
+                })
+              }
+              el.ontouchend = () => {
+                if (!isDragging.current) return
+                isDragging.current = false
+                setDragOffset(prev => {
+                  if (prev.x > 80) handleSwipe('right')
+                  else if (prev.x < -80) handleSwipe('left')
+                  else return { x: 0, y: 0 }
+                  return prev
+                })
+                dragStart.current = null
+              }
+            }}
             style={{
               position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
@@ -361,6 +387,7 @@ function SwipeContent() {
               userSelect: 'none',
               touchAction: 'none',
             }}
+            
           >
             <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
               {current.emoji}
