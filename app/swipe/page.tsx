@@ -49,10 +49,10 @@ const products: Record<string, { id: number; name: string; price: string; rating
   ],
   'PlayStation': [
     { id: 1, name: 'PS5本体', price: '¥66,980', rating: '4.8', emoji: '🕹', tags: ['本体', 'Sony', '高性能'] },
-    { id: 2, name: 'FF7リバース', price: '¥9,878', rating: '4.7', emoji: '⚔️', tags: ['RPG', 'Final Fantasy', 'PS5'] },
+    { id: 2, name: 'ELDEN RING NIGHTREIGN', price: '¥8,778', rating: '4.7', emoji: '⚔️', tags: ['アクション', 'フロム', 'PS5'] },
     { id: 3, name: 'DualSense コントローラー', price: '¥9,480', rating: '4.7', emoji: '🎮', tags: ['コントローラー', 'Sony', '振動'] },
-    { id: 4, name: 'Spider-Man 2', price: '¥8,678', rating: '4.8', emoji: '🕷', tags: ['アクション', 'Marvel', 'PS5'] },
-    { id: 5, name: 'God of War Ragnarok', price: '¥5,478', rating: '4.9', emoji: '🪓', tags: ['アクション', 'PS5', '神話'] },
+    { id: 4, name: 'Astro Bot', price: '¥7,678', rating: '4.9', emoji: '🤖', tags: ['アクション', 'GOTY', 'PS5'] },
+    { id: 5, name: 'Ghost of Yōtei', price: '¥8,778', rating: '4.8', emoji: '🗻', tags: ['アクション', 'オープンワールド', 'PS5'] },
   ],
   'PCゲーム': [
     { id: 1, name: 'ゲーミングPC RTX4070', price: '¥189,800', rating: '4.7', emoji: '💻', tags: ['高性能', 'RTX', 'デスクトップ'] },

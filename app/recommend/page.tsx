@@ -49,11 +49,11 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Nintendo Switch 2', price: '¥49,980', rating: '4.8', emoji: '🎮', tags: ['本体', '新型', '携帯'], url: 'https://amzn.to/4tgDy7p' },
   ],
   'PlayStation': [
-    { id: 1, name: 'PS5本体', price: '¥66,980', rating: '4.8', emoji: '🕹', tags: ['本体', 'Sony', '高性能'], url: 'https://www.amazon.co.jp/s?k=PS5%E6%9C%AC%E4%BD%93&tag=amanavi05-22' },
-    { id: 2, name: 'FF7リバース', price: '¥9,878', rating: '4.7', emoji: '⚔️', tags: ['RPG', 'Final Fantasy', 'PS5'], url: 'https://www.amazon.co.jp/s?k=FF7%E3%83%AA%E3%83%90%E3%83%BC%E3%82%B9&tag=amanavi05-22' },
-    { id: 3, name: 'DualSense コントローラー', price: '¥9,480', rating: '4.7', emoji: '🎮', tags: ['コントローラー', 'Sony', '振動'], url: 'https://www.amazon.co.jp/s?k=DualSense%20%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC&tag=amanavi05-22' },
-    { id: 4, name: 'Spider-Man 2', price: '¥8,678', rating: '4.8', emoji: '🕷', tags: ['アクション', 'Marvel', 'PS5'], url: 'https://www.amazon.co.jp/s?k=Spider-Man%202&tag=amanavi05-22' },
-    { id: 5, name: 'God of War Ragnarok', price: '¥5,478', rating: '4.9', emoji: '🪓', tags: ['アクション', 'PS5', '神話'], url: 'https://www.amazon.co.jp/s?k=God%20of%20War%20Ragnarok&tag=amanavi05-22' },
+    { id: 1, name: 'PS5本体', price: '¥66,980', rating: '4.8', emoji: '🕹', tags: ['本体', 'Sony', '高性能'], url: 'https://amzn.to/4vtLUtP' },
+    { id: 2, name: 'ELDEN RING NIGHTREIGN', price: '¥8,778', rating: '4.7', emoji: '⚔️', tags: ['アクション', 'フロム', 'PS5'], url: 'https://amzn.to/4sApBQc' },
+    { id: 3, name: 'DualSense コントローラー', price: '¥9,480', rating: '4.7', emoji: '🎮', tags: ['コントローラー', 'Sony', '振動'], url: 'https://amzn.to/4tQgNqC' },
+    { id: 4, name: 'Astro Bot', price: '¥7,678', rating: '4.9', emoji: '🤖', tags: ['アクション', 'GOTY', 'PS5'], url: 'https://amzn.to/4tKNrKc' },
+    { id: 5, name: 'Ghost of Yōtei', price: '¥8,778', rating: '4.8', emoji: '🗻', tags: ['アクション', 'オープンワールド', 'PS5'], url: 'https://amzn.to/487bnz3' },
   ],
   'PCゲーム': [
     { id: 1, name: 'ゲーミングPC RTX4070', price: '¥189,800', rating: '4.7', emoji: '💻', tags: ['高性能', 'RTX', 'デスクトップ'], url: 'https://www.amazon.co.jp/s?k=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0PC%20RTX4070&tag=amanavi05-22' },
