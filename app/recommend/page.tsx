@@ -154,11 +154,11 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'SSK 野球グローブ', price: '¥12,800', rating: '4.5', emoji: '⚾', tags: ['野球', 'SSK', 'キャッチャー'], url: 'https://www.amazon.co.jp/s?k=SSK%20%E9%87%8E%E7%90%83%E3%82%B0%E3%83%AD%E3%83%BC%E3%83%96&tag=amanavi05-22' },
   ],
   'キッチン家電': [
-    { id: 1, name: 'バルミューダ トースター', price: '¥33,000', rating: '4.6', emoji: '🍞', tags: ['おしゃれ', 'トースト', 'バルミューダ'], url: 'https://www.amazon.co.jp/s?k=%E3%83%90%E3%83%AB%E3%83%9F%E3%83%A5%E3%83%BC%E3%83%80%20%E3%83%88%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC&tag=amanavi05-22' },
-    { id: 2, name: 'デロンギ コーヒーメーカー', price: '¥44,800', rating: '4.7', emoji: '☕', tags: ['コーヒー', 'デロンギ', '全自動'], url: 'https://www.amazon.co.jp/s?k=%E3%83%87%E3%83%AD%E3%83%B3%E3%82%AE%20%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%E3%83%A1%E3%83%BC%E3%82%AB%E3%83%BC&tag=amanavi05-22' },
-    { id: 3, name: 'バイタミックス ブレンダー', price: '¥89,800', rating: '4.7', emoji: '🥤', tags: ['高性能', 'スムージー', '業務用'], url: 'https://www.amazon.co.jp/s?k=%E3%83%90%E3%82%A4%E3%82%BF%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9%20%E3%83%96%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC&tag=amanavi05-22' },
-    { id: 4, name: 'シャープ ヘルシオ', price: '¥54,800', rating: '4.6', emoji: '🍳', tags: ['ウォーターオーブン', 'ヘルシー', 'シャープ'], url: 'https://www.amazon.co.jp/s?k=%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%97%20%E3%83%98%E3%83%AB%E3%82%B7%E3%82%AA&tag=amanavi05-22' },
-    { id: 5, name: 'タイガー 炊飯器', price: '¥24,800', rating: '4.7', emoji: '🍚', tags: ['炊飯器', 'タイガー', '日本製'], url: 'https://www.amazon.co.jp/s?k=%E3%82%BF%E3%82%A4%E3%82%AC%E3%83%BC%20%E7%82%8A%E9%A3%AF%E5%99%A8&tag=amanavi05-22' },
+    { id: 1, name: 'バルミューダ トースター', price: '¥33,000', rating: '4.6', emoji: '🍞', tags: ['おしゃれ', 'トースト', 'バルミューダ'], url: 'https://amzn.to/4tHFsgQ' },
+    { id: 2, name: 'デロンギ コーヒーメーカー', price: '¥44,800', rating: '4.7', emoji: '☕', tags: ['コーヒー', 'デロンギ', '全自動'], url: 'https://amzn.to/3QIwPEw' },
+    { id: 3, name: 'バイタミックス ブレンダー', price: '¥89,800', rating: '4.7', emoji: '🥤', tags: ['高性能', 'スムージー', '業務用'], url: 'https://amzn.to/3Qcf801' },
+    { id: 4, name: 'シャープ ヘルシオ', price: '¥54,800', rating: '4.6', emoji: '🍳', tags: ['ウォーターオーブン', 'ヘルシー', 'シャープ'], url: 'https://amzn.to/48JPXbp' },
+    { id: 5, name: 'タイガー 炊飯器', price: '¥24,800', rating: '4.7', emoji: '🍚', tags: ['炊飯器', 'タイガー', '日本製'], url: 'https://amzn.to/41Cqb55' },
   ],
   '空調・空気': [
     { id: 1, name: 'ダイソン 空気清浄機', price: '¥89,800', rating: '4.7', emoji: '💨', tags: ['空気清浄', '扇風機', 'ダイソン'], url: 'https://www.amazon.co.jp/s?k=%E3%83%80%E3%82%A4%E3%82%BD%E3%83%B3%20%E7%A9%BA%E6%B0%97%E6%B8%85%E6%B5%84%E6%A9%9F&tag=amanavi05-22' },
