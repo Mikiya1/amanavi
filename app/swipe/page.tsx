@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, Suspense } from 'react'
+import { useState, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 
@@ -189,12 +189,27 @@ const products: Record<string, { id: number; name: string; price: string; rating
   ],
 }
 
+// カテゴリごとのグラデーション
+const categoryColors: Record<string, { from: string; to: string }> = {
+  'イヤホン': { from: '#1a1a2e', to: '#16213e' },
+  'モニター': { from: '#0f3460', to: '#1a1a2e' },
+  'PC周辺機器': { from: '#1a1a2e', to: '#0f3460' },
+  'タブレット': { from: '#16213e', to: '#0f3460' },
+  'Nintendo Switch': { from: '#e63946', to: '#c1121f' },
+  'PlayStation': { from: '#003087', to: '#001d5e' },
+  'PCゲーム': { from: '#1b4332', to: '#081c15' },
+  'キッチン家電': { from: '#7b2d00', to: '#4a1800' },
+  '筋トレ': { from: '#1b4332', to: '#052e16' },
+  'ランニング': { from: '#1c1c1c', to: '#2d2d2d' },
+}
+
 function SwipeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const genre = searchParams.get('genre') ?? 'ガジェット'
   const category = searchParams.get('category') ?? 'スマホ'
   const items = products[category] ?? products['スマホ']
+  const colors = categoryColors[category] ?? { from: '#1a1a2e', to: '#0f3460' }
 
   const [index, setIndex] = useState(0)
   const [likedTags, setLikedTags] = useState<string[]>([])
@@ -203,57 +218,33 @@ function SwipeContent() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const dragStart = useRef<{ x: number; y: number } | null>(null)
   const isDragging = useRef(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const current = items[index]
   const next = items[index + 1]
   const nextNext = items[index + 2]
 
-  const handleSwipe = (dir: 'left' | 'right') => {
+  const handleSwipe = useCallback((dir: 'left' | 'right') => {
     if (animating) return
     setDragOffset({ x: 0, y: 0 })
     setAnimating(dir)
-    const newTags = dir === 'right' ? [...likedTags, ...current.tags] : likedTags
-    if (dir === 'right') setLikedTags(newTags)
+    if (dir === 'right') setLikedTags(prev => [...prev, ...current.tags])
     setTimeout(() => {
       setAnimating(null)
       if (index + 1 >= items.length) setDone(true)
       else setIndex(prev => prev + 1)
     }, 320)
-  }
+  }, [animating, current, index, items.length])
 
-  const onTouchStart = (e: React.TouchEvent) => {
+  // タッチイベント（Reactハンドラーのみ・統一）
+  const onPointerDown = (e: React.PointerEvent) => {
     if (animating) return
-    const t = e.touches[0]
-    dragStart.current = { x: t.clientX, y: t.clientY }
-    isDragging.current = true
-  }
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current || !dragStart.current || animating) return
-    const t = e.touches[0]
-    setDragOffset({
-      x: t.clientX - dragStart.current.x,
-      y: t.clientY - dragStart.current.y,
-    })
-  }
-
-  const onTouchEnd = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
-    const { x } = dragOffset
-    if (x > 80) handleSwipe('right')
-    else if (x < -80) handleSwipe('left')
-    else setDragOffset({ x: 0, y: 0 })
-    dragStart.current = null
-  }
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (animating) return
+    e.currentTarget.setPointerCapture(e.pointerId)
     dragStart.current = { x: e.clientX, y: e.clientY }
     isDragging.current = true
   }
 
-  const onMouseMove = (e: React.MouseEvent) => {
+  const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current || !dragStart.current || animating) return
     setDragOffset({
       x: e.clientX - dragStart.current.x,
@@ -261,10 +252,10 @@ function SwipeContent() {
     })
   }
 
-  const onMouseUp = () => {
+  const onPointerUp = () => {
     if (!isDragging.current) return
     isDragging.current = false
-    const { x } = dragOffset
+    const x = dragOffset.x
     if (x > 80) handleSwipe('right')
     else if (x < -80) handleSwipe('left')
     else setDragOffset({ x: 0, y: 0 })
@@ -272,44 +263,47 @@ function SwipeContent() {
   }
 
   const getCardTransform = () => {
-    if (animating === 'right') return 'translateX(130%) rotate(20deg)'
-    if (animating === 'left') return 'translateX(-130%) rotate(-20deg)'
-    if (isDragging.current || (dragOffset.x !== 0 || dragOffset.y !== 0)) {
+    if (animating === 'right') return 'translateX(150%) rotate(25deg)'
+    if (animating === 'left') return 'translateX(-150%) rotate(-25deg)'
+    if (dragOffset.x !== 0 || dragOffset.y !== 0) {
       const rotate = dragOffset.x * 0.08
       return `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${rotate}deg)`
     }
     return 'none'
   }
 
-  const showLike = animating === 'right' || dragOffset.x > 40
-  const showNope = animating === 'left' || dragOffset.x < -40
+  const likeOpacity = Math.min(1, Math.max(0, dragOffset.x / 80))
+  const nopeOpacity = Math.min(1, Math.max(0, -dragOffset.x / 80))
+  const showLike = animating === 'right' || dragOffset.x > 20
+  const showNope = animating === 'left' || dragOffset.x < -20
 
   if (done) {
     return (
       <>
         <Header />
-        <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
-          <div style={{ fontSize: '48px' }}>🎉</div>
-          <h2 style={{ fontSize: '24px', fontWeight: '600' }}>診断完了！</h2>
-          <div style={{ background: '#1C1C1E', borderRadius: '16px', padding: '16px 20px', width: '100%' }}>
-            <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>あなたの好みキーワード</div>
+        <main style={{ background: '#F3F3F3', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
+          <div style={{ fontSize: '56px' }}>🎉</div>
+          <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#0F1111' }}>診断完了！</h2>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '16px 20px', width: '100%', border: '1px solid #DDD' }}>
+            <div style={{ fontSize: '12px', color: '#888', marginBottom: '10px', fontWeight: '600' }}>あなたの好みキーワード</div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {[...new Set(likedTags)].map(tag => (
-                <span key={tag} style={{ background: '#2a2a2a', color: '#FF9500', fontSize: '13px', padding: '4px 12px', borderRadius: '20px', border: '1px solid #FF9500' }}>
+                <span key={tag} style={{ background: '#FFF3CD', color: '#FF9900', fontSize: '13px', padding: '4px 12px', borderRadius: '20px', border: '1px solid #FF9900', fontWeight: '600' }}>
                   {tag}
                 </span>
               ))}
+              {likedTags.length === 0 && <span style={{ color: '#888', fontSize: '13px' }}>スキップしました</span>}
             </div>
           </div>
           <button
             onClick={() => router.push(`/recommend?genre=${genre}&category=${category}&tags=${[...new Set(likedTags)].join(',')}`)}
-            style={{ background: '#FF9500', color: '#fff', border: 'none', borderRadius: '16px', padding: '16px', fontSize: '17px', fontWeight: '600', width: '100%' }}
+            style={{ background: '#FFD814', color: '#0F1111', border: 'none', borderRadius: '12px', padding: '16px', fontSize: '16px', fontWeight: '700', width: '100%', cursor: 'pointer' }}
           >
-            おすすめを見る
+            おすすめを見る →
           </button>
           <button
             onClick={() => { setIndex(0); setLikedTags([]); setDone(false) }}
-            style={{ background: 'transparent', color: '#888', border: '1px solid #DDD', borderRadius: '16px', padding: '14px', fontSize: '15px', width: '100%' }}
+            style={{ background: '#fff', color: '#565959', border: '1px solid #DDD', borderRadius: '12px', padding: '14px', fontSize: '14px', width: '100%', cursor: 'pointer' }}
           >
             もう一度やり直す
           </button>
@@ -321,124 +315,116 @@ function SwipeContent() {
   return (
     <>
       <Header />
-      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 20px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 20px 32px', maxWidth: '480px', margin: '0 auto' }}>
 
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <button onClick={() => router.push(`/category?genres=${genre}`)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '14px', padding: 0, cursor: 'pointer' }}>← 戻る</button>
-          <span style={{ color: '#666', fontSize: '14px' }}>{index + 1} / {items.length}</span>
+        {/* ナビ */}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <button onClick={() => router.push(`/category?genres=${genre}`)} style={{ background: '#fff', border: '1px solid #DDD', borderRadius: '8px', color: '#565959', fontSize: '13px', padding: '6px 12px', cursor: 'pointer' }}>← 戻る</button>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: '#FF9900', fontWeight: '700' }}>{genre} / {category}</div>
+            <div style={{ fontSize: '12px', color: '#888' }}>{index + 1} / {items.length}</div>
+          </div>
+          <div style={{ width: '60px' }} />
         </div>
 
-        <div style={{ width: '100%', marginBottom: '8px' }}>
-          <div style={{ fontSize: '13px', color: '#FF9500', fontWeight: '600', marginBottom: '4px' }}>STEP 3 · {genre} / {category}</div>
-          <div style={{ fontSize: '20px', fontWeight: '600' }}>気になる商品は？</div>
+        {/* プログレスバー */}
+        <div style={{ width: '100%', height: '4px', background: '#DDD', borderRadius: '2px', marginBottom: '16px' }}>
+          <div style={{ height: '100%', background: '#FF9900', borderRadius: '2px', width: `${((index + 1) / items.length) * 100}%`, transition: 'width 0.3s' }} />
         </div>
 
-        <div style={{ width: '100%', height: '3px', background: '#1C1C1E', borderRadius: '2px', marginBottom: '24px' }}>
-          <div style={{ height: '100%', background: '#FF9500', borderRadius: '2px', width: `${((index + 1) / items.length) * 100}%`, transition: 'width 0.3s' }} />
+        <div style={{ fontSize: '15px', fontWeight: '700', color: '#0F1111', marginBottom: '16px', alignSelf: 'flex-start' }}>
+          気になる商品は？
         </div>
 
-        <div style={{ width: '100%', position: 'relative', height: '380px', marginBottom: '24px' }}>
+        {/* カードスタック */}
+        <div style={{ width: '100%', position: 'relative', height: '400px', marginBottom: '24px' }}>
           {nextNext && (
-            <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.90) translateY(16px)', zIndex: 0 }} />
+            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`, borderRadius: '20px', transform: 'scale(0.88) translateY(20px)', zIndex: 0, opacity: 0.6 }} />
           )}
           {next && (
-            <div style={{ position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', transform: 'scale(0.95) translateY(8px)', zIndex: 1 }} />
+            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`, borderRadius: '20px', transform: 'scale(0.94) translateY(10px)', zIndex: 1, opacity: 0.8 }} />
           )}
 
+          {/* メインカード */}
           <div
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            ref={(el) => {
-              if (!el) return
-              el.ontouchstart = (e) => {
-                if (animating) return
-                const t = e.touches[0]
-                dragStart.current = { x: t.clientX, y: t.clientY }
-                isDragging.current = true
-              }
-              el.ontouchmove = (e) => {
-                e.preventDefault()
-                if (!isDragging.current || !dragStart.current || animating) return
-                const t = e.touches[0]
-                setDragOffset({
-                  x: t.clientX - dragStart.current.x,
-                  y: t.clientY - dragStart.current.y,
-                })
-              }
-              el.ontouchend = () => {
-                if (!isDragging.current) return
-                isDragging.current = false
-                setDragOffset(prev => {
-                  if (prev.x > 80) handleSwipe('right')
-                  else if (prev.x < -80) handleSwipe('left')
-                  else return { x: 0, y: 0 }
-                  return prev
-                })
-                dragStart.current = null
-              }
-            }}
+            ref={cardRef}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
             style={{
-              position: 'absolute', inset: 0, background: '#1C1C1E', borderRadius: '20px', overflow: 'hidden', zIndex: 2,
+              position: 'absolute', inset: 0,
+              background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`,
+              borderRadius: '20px', overflow: 'hidden', zIndex: 2,
               transform: getCardTransform(),
               transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
-              cursor: 'grab',
+              cursor: isDragging.current ? 'grabbing' : 'grab',
               userSelect: 'none',
               touchAction: 'none',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
             }}
-            
           >
-            <div style={{ height: '220px', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', position: 'relative', pointerEvents: 'none' }}>
+            {/* LIKE / NOPE ラベル */}
+            {showLike && (
+              <div style={{
+                position: 'absolute', top: '24px', left: '20px', zIndex: 10,
+                border: '3px solid #4CD964', borderRadius: '8px', padding: '6px 16px',
+                transform: 'rotate(-15deg)', color: '#4CD964',
+                fontSize: '28px', fontWeight: '900', letterSpacing: '3px',
+                opacity: animating === 'right' ? 1 : likeOpacity,
+              }}>LIKE</div>
+            )}
+            {showNope && (
+              <div style={{
+                position: 'absolute', top: '24px', right: '20px', zIndex: 10,
+                border: '3px solid #FF3B30', borderRadius: '8px', padding: '6px 16px',
+                transform: 'rotate(15deg)', color: '#FF3B30',
+                fontSize: '28px', fontWeight: '900', letterSpacing: '3px',
+                opacity: animating === 'left' ? 1 : nopeOpacity,
+              }}>NOPE</div>
+            )}
+
+            {/* 絵文字エリア */}
+            <div style={{
+              height: '220px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '96px',
+              background: 'rgba(255,255,255,0.05)',
+              pointerEvents: 'none',
+            }}>
               {current.emoji}
-              {showLike && (
-                <div style={{
-                  position: 'absolute', top: '24px', left: '20px',
-                  border: '3px solid #4CD964', borderRadius: '8px', padding: '6px 16px',
-                  transform: 'rotate(-15deg)', color: '#4CD964',
-                  fontSize: '28px', fontWeight: '800', letterSpacing: '2px',
-                  opacity: Math.min(1, Math.abs(dragOffset.x) / 80),
-                }}>LIKE</div>
-              )}
-              {showNope && (
-                <div style={{
-                  position: 'absolute', top: '24px', right: '20px',
-                  border: '3px solid #FF3B30', borderRadius: '8px', padding: '6px 16px',
-                  transform: 'rotate(15deg)', color: '#FF3B30',
-                  fontSize: '28px', fontWeight: '800', letterSpacing: '2px',
-                  opacity: Math.min(1, Math.abs(dragOffset.x) / 80),
-                }}>NOPE</div>
-              )}
             </div>
 
-            <div style={{ padding: '20px', pointerEvents: 'none' }}>
-              <div style={{ fontSize: '20px', fontWeight: '600' }}>{current.name}</div>
-              <div style={{ color: '#FF9500', fontSize: '18px', marginTop: '4px', fontWeight: '700' }}>{current.price}</div>
+            {/* 商品情報 */}
+            <div style={{ padding: '20px 24px', pointerEvents: 'none' }}>
+              <div style={{ fontSize: '20px', fontWeight: '700', color: '#fff', lineHeight: 1.3 }}>{current.name}</div>
+              <div style={{ color: '#FFD814', fontSize: '22px', marginTop: '6px', fontWeight: '700' }}>{current.price}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-                <span style={{ color: '#FFD60A', fontSize: '14px' }}>★</span>
-                <span style={{ fontSize: '13px', color: '#888' }}>{current.rating}</span>
+                <span style={{ color: '#FFD814', fontSize: '14px' }}>★</span>
+                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)' }}>{current.rating}</span>
               </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px' }}>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '12px' }}>
                 {current.tags.map(tag => (
-                  <span key={tag} style={{ background: '#333', color: '#ccc', fontSize: '12px', padding: '4px 10px', borderRadius: '20px' }}>{tag}</span>
+                  <span key={tag} style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: '12px', padding: '4px 10px', borderRadius: '20px', backdropFilter: 'blur(4px)' }}>{tag}</span>
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        {/* ボタン */}
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
           <button
             onClick={() => handleSwipe('left')}
-            style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1.5px solid #444', background: '#1C1C1E', fontSize: '26px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: '64px', height: '64px', borderRadius: '50%', border: '2px solid #DDD', background: '#fff', fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
           >✕</button>
           <button
             onClick={() => handleSwipe('right')}
-            style={{ width: '72px', height: '72px', borderRadius: '50%', border: '2px solid #FF9500', background: '#FF9500', fontSize: '28px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(255,149,0,0.4)' }}
+            style={{ width: '72px', height: '72px', borderRadius: '50%', border: 'none', background: '#FF9900', fontSize: '28px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 16px rgba(255,153,0,0.5)' }}
           >♥</button>
         </div>
 
-        <div style={{ marginTop: '16px', fontSize: '12px', color: '#444' }}>← 興味なし ／ 気になる →</div>
+        <div style={{ marginTop: '12px', fontSize: '12px', color: '#888' }}>← スキップ ／ 気になる →</div>
 
       </main>
     </>
