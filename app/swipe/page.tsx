@@ -288,7 +288,7 @@ function SwipeContent() {
     return (
       <>
         <Header />
-        <main style={{ background: '#0F0F0F', minHeight: '100vh', color: '#fff', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
+        <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
           <div style={{ fontSize: '48px' }}>🎉</div>
           <h2 style={{ fontSize: '24px', fontWeight: '600' }}>診断完了！</h2>
           <div style={{ background: '#1C1C1E', borderRadius: '16px', padding: '16px 20px', width: '100%' }}>
@@ -309,7 +309,7 @@ function SwipeContent() {
           </button>
           <button
             onClick={() => { setIndex(0); setLikedTags([]); setDone(false) }}
-            style={{ background: 'transparent', color: '#888', border: '1px solid #333', borderRadius: '16px', padding: '14px', fontSize: '15px', width: '100%' }}
+            style={{ background: 'transparent', color: '#888', border: '1px solid #DDD', borderRadius: '16px', padding: '14px', fontSize: '15px', width: '100%' }}
           >
             もう一度やり直す
           </button>
@@ -321,7 +321,7 @@ function SwipeContent() {
   return (
     <>
       <Header />
-      <main style={{ background: '#0F0F0F', minHeight: '100vh', color: '#fff', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 20px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 20px', maxWidth: '480px', margin: '0 auto' }}>
 
         <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
           <button onClick={() => router.push(`/category?genres=${genre}`)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '14px', padding: 0, cursor: 'pointer' }}>← 戻る</button>
