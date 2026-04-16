@@ -21,11 +21,11 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Lenovo Tab P12', price: '¥54,800', rating: '4.4', emoji: '📲', tags: ['大画面', 'Android', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=Lenovo%20Tab%20P12&tag=amanavi05-22' },
   ],
   'イヤホン': [
-    { id: 1, name: 'AirPods Pro 2', price: '¥39,800', rating: '4.8', emoji: '🎧', tags: ['Apple', 'ノイキャン', '空間音響'], url: 'https://amzn.to/3NXDwSu' },
-    { id: 2, name: 'Sony WF-1000XM5', price: '¥38,500', rating: '4.8', emoji: '🎧', tags: ['Sony', 'ノイキャン', '高音質'], url: 'https://amzn.to/4cge82q' },
-    { id: 3, name: 'Anker Soundcore P40i', price: '¥5,990', rating: '4.6', emoji: '🎧', tags: ['コスパ', 'ノイキャン', 'Anker'], url: 'https://amzn.to/3OyWHCd' },
-    { id: 4, name: 'Nothing Ear 2', price: '¥22,800', rating: '4.5', emoji: '🎧', tags: ['デザイン', '高音質', 'おしゃれ'], url: 'https://www.amazon.co.jp/s?k=Nothing%20Ear%202&tag=amanavi05-22' },
-    { id: 5, name: 'Bose QuietComfort', price: '¥29,800', rating: '4.7', emoji: '🎧', tags: ['Bose', 'ノイキャン', '快適'], url: 'https://www.amazon.co.jp/s?k=Bose%20QuietComfort&tag=amanavi05-22' },
+    { id: 1, name: 'AirPods Pro 2', price: '¥39,800', rating: '4.8', emoji: '🎧', tags: ['Apple', 'ノイキャン', '空間音響'], url: 'https://amzn.to/4sxYKV1' },
+    { id: 2, name: 'Sony WF-1000XM5', price: '¥38,500', rating: '4.8', emoji: '🎧', tags: ['Sony', 'ノイキャン', '高音質'], url: 'https://amzn.to/3Qgx35K' },
+    { id: 3, name: 'Anker Soundcore P40i', price: '¥5,990', rating: '4.6', emoji: '🎧', tags: ['コスパ', 'ノイキャン', 'Anker'], url: 'https://amzn.to/3Qgx4qk' },
+    { id: 4, name: 'Nothing Ear 2', price: '¥22,800', rating: '4.5', emoji: '🎧', tags: ['デザイン', '高音質', 'おしゃれ'], url: 'https://amzn.to/4cLxdux' },
+    { id: 5, name: 'Bose QuietComfort', price: '¥29,800', rating: '4.7', emoji: '🎧', tags: ['Bose', 'ノイキャン', '快適'], url: 'https://amzn.to/4dKL7OG' },
   ],
   'モニター': [
     { id: 1, name: 'LG 27UL500 4K', price: '¥32,800', rating: '4.6', emoji: '🖥', tags: ['4K', 'LG', 'USB-C'], url: 'https://www.amazon.co.jp/s?k=LG%2027UL500%204K&tag=amanavi05-22' },
