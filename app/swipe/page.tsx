@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, Suspense } from 'react'
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
 
@@ -236,31 +236,51 @@ function SwipeContent() {
     }, 320)
   }, [animating, current, index, items.length])
 
-  // タッチイベント（Reactハンドラーのみ・統一）
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (animating) return
-    e.currentTarget.setPointerCapture(e.pointerId)
-    dragStart.current = { x: e.clientX, y: e.clientY }
-    isDragging.current = true
-  }
+  // タッチ・マウスイベントをuseEffectで直接DOM登録
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card) return
 
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!isDragging.current || !dragStart.current || animating) return
-    setDragOffset({
-      x: e.clientX - dragStart.current.x,
-      y: e.clientY - dragStart.current.y,
-    })
-  }
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault()
+      if (animating) return
+      const t = e.touches[0]
+      dragStart.current = { x: t.clientX, y: t.clientY }
+      isDragging.current = true
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault()
+      if (!isDragging.current || !dragStart.current) return
+      const t = e.touches[0]
+      setDragOffset({
+        x: t.clientX - dragStart.current.x,
+        y: t.clientY - dragStart.current.y,
+      })
+    }
+    const onTouchEnd = () => {
+      if (!isDragging.current) return
+      isDragging.current = false
+      setDragOffset(prev => {
+        setTimeout(() => {
+          if (prev.x > 80) handleSwipe('right')
+          else if (prev.x < -80) handleSwipe('left')
+          else setDragOffset({ x: 0, y: 0 })
+        }, 0)
+        return prev
+      })
+      dragStart.current = null
+    }
 
-  const onPointerUp = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
-    const x = dragOffset.x
-    if (x > 80) handleSwipe('right')
-    else if (x < -80) handleSwipe('left')
-    else setDragOffset({ x: 0, y: 0 })
-    dragStart.current = null
-  }
+    card.addEventListener('touchstart', onTouchStart, { passive: false })
+    card.addEventListener('touchmove', onTouchMove, { passive: false })
+    card.addEventListener('touchend', onTouchEnd)
+
+    return () => {
+      card.removeEventListener('touchstart', onTouchStart)
+      card.removeEventListener('touchmove', onTouchMove)
+      card.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [animating, handleSwipe])
 
   const getCardTransform = () => {
     if (animating === 'right') return 'translateX(150%) rotate(25deg)'
@@ -348,10 +368,29 @@ function SwipeContent() {
           {/* メインカード */}
           <div
             ref={cardRef}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
+            onMouseDown={(e) => {
+              dragStart.current = { x: e.clientX, y: e.clientY }
+              isDragging.current = true
+            }}
+            onMouseMove={(e) => {
+              if (!isDragging.current || !dragStart.current) return
+              setDragOffset({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y })
+            }}
+            onMouseUp={() => {
+              if (!isDragging.current) return
+              isDragging.current = false
+              const x = dragOffset.x
+              if (x > 80) handleSwipe('right')
+              else if (x < -80) handleSwipe('left')
+              else setDragOffset({ x: 0, y: 0 })
+              dragStart.current = null
+            }}
+            onMouseLeave={() => {
+              if (!isDragging.current) return
+              isDragging.current = false
+              setDragOffset({ x: 0, y: 0 })
+              dragStart.current = null
+            }}
             style={{
               position: 'absolute', inset: 0,
               background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`,
