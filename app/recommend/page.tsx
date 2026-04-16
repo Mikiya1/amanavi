@@ -56,7 +56,7 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Ghost of Yōtei', price: '¥8,778', rating: '4.8', emoji: '🗻', tags: ['アクション', 'オープンワールド', 'PS5'], url: 'https://amzn.to/487bnz3' },
   ],
   'PCゲーム': [
-    { id: 1, name: 'ゲーミングPC RTX4070', price: '¥189,800', rating: '4.7', emoji: '💻', tags: ['高性能', 'RTX', 'デスクトップ'], url: 'https://www.amazon.co.jp/s?k=%E3%82%B2%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0PC%20RTX4070&tag=amanavi05-22' },
+    { id: 1, name: 'GTPLAYERゲーミングチェア', price: '¥19,800', rating: '4.5', emoji: '🪑', tags: ['チェア', 'オットマン付き', 'コスパ'], url: 'https://amzn.to/4cMQZG8' },
     { id: 2, name: 'ロジクール G PRO X', price: '¥14,800', rating: '4.7', emoji: '🖱', tags: ['ゲーミングマウス', 'FPS', 'ロジクール'], url: 'https://www.amazon.co.jp/s?k=%E3%83%AD%E3%82%B8%E3%82%AF%E3%83%BC%E3%83%AB%20G%20PRO%20X&tag=amanavi05-22' },
     { id: 3, name: 'HyperX Cloud III', price: '¥14,300', rating: '4.6', emoji: '🎧', tags: ['ゲーミングヘッドセット', '音質', 'HyperX'], url: 'https://www.amazon.co.jp/s?k=HyperX%20Cloud%20III&tag=amanavi05-22' },
     { id: 4, name: 'ASUS ROG キーボード', price: '¥18,800', rating: '4.5', emoji: '⌨️', tags: ['メカニカル', 'RGB', 'ゲーミング'], url: 'https://www.amazon.co.jp/s?k=ASUS%20ROG%20%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89&tag=amanavi05-22' },

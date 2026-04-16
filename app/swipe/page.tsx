@@ -55,7 +55,7 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Ghost of Yōtei', price: '¥8,778', rating: '4.8', emoji: '🗻', tags: ['アクション', 'オープンワールド', 'PS5'] },
   ],
   'PCゲーム': [
-    { id: 1, name: 'ゲーミングPC RTX4070', price: '¥189,800', rating: '4.7', emoji: '💻', tags: ['高性能', 'RTX', 'デスクトップ'] },
+    { id: 1, name: 'GTPLAYERゲーミングチェア', price: '¥19,800', rating: '4.5', emoji: '🪑', tags: ['チェア', 'オットマン付き', 'コスパ'] },
     { id: 2, name: 'ロジクール G PRO X', price: '¥14,800', rating: '4.7', emoji: '🖱', tags: ['ゲーミングマウス', 'FPS', 'ロジクール'] },
     { id: 3, name: 'HyperX Cloud III', price: '¥14,300', rating: '4.6', emoji: '🎧', tags: ['ゲーミングヘッドセット', '音質', 'HyperX'] },
     { id: 4, name: 'ASUS ROG キーボード', price: '¥18,800', rating: '4.5', emoji: '⌨️', tags: ['メカニカル', 'RGB', 'ゲーミング'] },
