@@ -57,10 +57,10 @@ const products: Record<string, { id: number; name: string; price: string; rating
   ],
   'PCゲーム': [
     { id: 1, name: 'GTPLAYERゲーミングチェア', price: '¥19,800', rating: '4.5', emoji: '🪑', tags: ['チェア', 'オットマン付き', 'コスパ'], url: 'https://amzn.to/4cMQZG8' },
-    { id: 2, name: 'ロジクール G PRO X', price: '¥14,800', rating: '4.7', emoji: '🖱', tags: ['ゲーミングマウス', 'FPS', 'ロジクール'], url: 'https://www.amazon.co.jp/s?k=%E3%83%AD%E3%82%B8%E3%82%AF%E3%83%BC%E3%83%AB%20G%20PRO%20X&tag=amanavi05-22' },
-    { id: 3, name: 'HyperX Cloud III', price: '¥14,300', rating: '4.6', emoji: '🎧', tags: ['ゲーミングヘッドセット', '音質', 'HyperX'], url: 'https://www.amazon.co.jp/s?k=HyperX%20Cloud%20III&tag=amanavi05-22' },
-    { id: 4, name: 'ASUS ROG キーボード', price: '¥18,800', rating: '4.5', emoji: '⌨️', tags: ['メカニカル', 'RGB', 'ゲーミング'], url: 'https://www.amazon.co.jp/s?k=ASUS%20ROG%20%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89&tag=amanavi05-22' },
-    { id: 5, name: 'Steam Deck OLED', price: '¥89,800', rating: '4.8', emoji: '🎮', tags: ['携帯ゲーミング', 'Valve', 'OLED'], url: 'https://www.amazon.co.jp/s?k=Steam%20Deck%20OLED&tag=amanavi05-22' },
+    { id: 2, name: 'ロジクール G PRO X', price: '¥14,800', rating: '4.7', emoji: '🖱', tags: ['ゲーミングマウス', 'FPS', 'ロジクール'], url: 'https://amzn.to/3OK4DAC' },
+    { id: 3, name: 'HyperX Cloud III', price: '¥14,300', rating: '4.6', emoji: '🎧', tags: ['ゲーミングヘッドセット', '音質', 'HyperX'], url: 'https://amzn.to/4dRb1jS' },
+    { id: 4, name: 'ASUS ROG キーボード', price: '¥18,800', rating: '4.5', emoji: '⌨️', tags: ['メカニカル', 'RGB', 'ゲーミング'], url: 'https://amzn.to/4dR5MR7' },
+    { id: 5, name: 'Steam Deck OLED', price: '¥89,800', rating: '4.8', emoji: '🎮', tags: ['携帯ゲーミング', 'Valve', 'OLED'], url: 'https://amzn.to/4cjtMtC' },
   ],
   'ビジネス書': [
     { id: 1, name: '嫌われる勇気', price: '¥1,650', rating: '4.6', emoji: '📖', tags: ['自己啓発', 'アドラー', 'ベストセラー'], url: 'https://www.amazon.co.jp/s?k=%E5%AB%8C%E3%82%8F%E3%82%8C%E3%82%8B%E5%8B%87%E6%B0%97&tag=amanavi05-22' },
