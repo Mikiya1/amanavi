@@ -42,11 +42,11 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 5, name: 'Twelve South HiRise', price: '¥8,800', rating: '4.5', emoji: '💻', tags: ['スタンド', 'Mac', 'デスク整理'], url: 'https://amzn.to/4cdqERo' },
   ],
   'Nintendo Switch': [
-    { id: 1, name: 'ゼルダの伝説 TotK', price: '¥7,678', rating: '4.9', emoji: '🗡', tags: ['RPG', '冒険', '任天堂'], url: 'https://www.amazon.co.jp/s?k=%E3%82%BC%E3%83%AB%E3%83%80%E3%81%AE%E4%BC%9D%E8%AA%AC%20TotK&tag=amanavi05-22' },
-    { id: 2, name: 'マリオカート8DX', price: '¥6,578', rating: '4.9', emoji: '🏎', tags: ['レース', 'パーティー', '任天堂'], url: 'https://www.amazon.co.jp/s?k=%E3%83%9E%E3%83%AA%E3%82%AA%E3%82%AB%E3%83%BC%E3%83%888DX&tag=amanavi05-22' },
-    { id: 3, name: 'スプラトゥーン3', price: '¥6,578', rating: '4.7', emoji: '🦑', tags: ['シューター', 'オンライン', '任天堂'], url: 'https://www.amazon.co.jp/s?k=%E3%82%B9%E3%83%97%E3%83%A9%E3%83%88%E3%82%A5%E3%83%BC%E3%83%B33&tag=amanavi05-22' },
-    { id: 4, name: 'あつまれどうぶつの森', price: '¥6,578', rating: '4.8', emoji: '🏝', tags: ['のんびり', 'コミュニティ', '任天堂'], url: 'https://www.amazon.co.jp/s?k=%E3%81%82%E3%81%A4%E3%81%BE%E3%82%8C%E3%81%A9%E3%81%86%E3%81%B6%E3%81%A4%E3%81%AE%E6%A3%AE&tag=amanavi05-22' },
-    { id: 5, name: 'Switch有機ELモデル', price: '¥37,980', rating: '4.8', emoji: '🎮', tags: ['本体', '有機EL', '携帯'], url: 'https://www.amazon.co.jp/s?k=Switch%E6%9C%89%E6%A9%9FEL%E3%83%A2%E3%83%87%E3%83%AB&tag=amanavi05-22' },
+    { id: 1, name: 'ゼルダの伝説 TotK', price: '¥7,678', rating: '4.9', emoji: '🗡', tags: ['RPG', '冒険', '任天堂'], url: 'https://amzn.to/3Qquoq6' },
+    { id: 2, name: 'マリオカートワールド', price: '¥7,678', rating: '4.9', emoji: '🏎', tags: ['レース', 'パーティー', '任天堂'], url: 'https://amzn.to/4tQgqwe' },
+    { id: 3, name: 'スプラトゥーン3', price: '¥6,578', rating: '4.7', emoji: '🦑', tags: ['シューター', 'オンライン', '任天堂'], url: 'https://amzn.to/47Z0n6Y' },
+    { id: 4, name: 'ポケットモンスター スカーレット', price: '¥6,578', rating: '4.6', emoji: '🎮', tags: ['RPG', 'ポケモン', '任天堂'], url: 'https://amzn.to/4myh4Mw' },
+    { id: 5, name: 'Nintendo Switch 2', price: '¥49,980', rating: '4.8', emoji: '🎮', tags: ['本体', '新型', '携帯'], url: 'https://amzn.to/4tgDy7p' },
   ],
   'PlayStation': [
     { id: 1, name: 'PS5本体', price: '¥66,980', rating: '4.8', emoji: '🕹', tags: ['本体', 'Sony', '高性能'], url: 'https://www.amazon.co.jp/s?k=PS5%E6%9C%AC%E4%BD%93&tag=amanavi05-22' },

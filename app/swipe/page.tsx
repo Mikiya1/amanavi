@@ -42,10 +42,10 @@ const products: Record<string, { id: number; name: string; price: string; rating
   ],
   'Nintendo Switch': [
     { id: 1, name: 'ゼルダの伝説 TotK', price: '¥7,678', rating: '4.9', emoji: '🗡', tags: ['RPG', '冒険', '任天堂'] },
-    { id: 2, name: 'マリオカート8DX', price: '¥6,578', rating: '4.9', emoji: '🏎', tags: ['レース', 'パーティー', '任天堂'] },
+    { id: 2, name: 'マリオカートワールド', price: '¥7,678', rating: '4.9', emoji: '🏎', tags: ['レース', 'パーティー', '任天堂'] },
     { id: 3, name: 'スプラトゥーン3', price: '¥6,578', rating: '4.7', emoji: '🦑', tags: ['シューター', 'オンライン', '任天堂'] },
-    { id: 4, name: 'あつまれどうぶつの森', price: '¥6,578', rating: '4.8', emoji: '🏝', tags: ['のんびり', 'コミュニティ', '任天堂'] },
-    { id: 5, name: 'Switch有機ELモデル', price: '¥37,980', rating: '4.8', emoji: '🎮', tags: ['本体', '有機EL', '携帯'] },
+    { id: 4, name: 'ポケットモンスター スカーレット', price: '¥6,578', rating: '4.6', emoji: '🎮', tags: ['RPG', 'ポケモン', '任天堂'] },
+    { id: 5, name: 'Nintendo Switch 2', price: '¥49,980', rating: '4.8', emoji: '🎮', tags: ['本体', '新型', '携帯'] },
   ],
   'PlayStation': [
     { id: 1, name: 'PS5本体', price: '¥66,980', rating: '4.8', emoji: '🕹', tags: ['本体', 'Sony', '高性能'] },
