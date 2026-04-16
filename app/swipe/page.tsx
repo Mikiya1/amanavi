@@ -16,7 +16,7 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 1, name: 'iPad Air M2', price: '¥98,800', rating: '4.8', emoji: '📲', tags: ['Apple', '軽量', 'M2チップ'] },
     { id: 2, name: 'iPad mini 7', price: '¥78,800', rating: '4.7', emoji: '📲', tags: ['Apple', 'コンパクト', '持ち運び'] },
     { id: 3, name: 'Galaxy Tab S9', price: '¥89,800', rating: '4.6', emoji: '📲', tags: ['Android', 'AMOLED', 'Samsung'] },
-    { id: 4, name: 'Fire HD 10', price: '¥19,980', rating: '4.3', emoji: '📲', tags: ['コスパ', 'Amazon', '動画'] },
+    { id: 4, name: 'Fire Max 11', price: '¥34,980', rating: '4.4', emoji: '📲', tags: ['コスパ', 'Amazon', '大画面'] },
     { id: 5, name: 'Lenovo Tab P12', price: '¥54,800', rating: '4.4', emoji: '📲', tags: ['大画面', 'Android', 'コスパ'] },
   ],
   'イヤホン': [
