@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
+import SwipeCard from '../components/SwipeCard'
 
 const products: Record<string, { id: number; name: string; price: string; rating: string; emoji: string; tags: string[] }[]> = {
   'スマホ': [
@@ -364,97 +365,40 @@ function SwipeContent() {
         {/* カードスタック */}
         <div style={{ width: '100%', position: 'relative', height: '400px', marginBottom: '24px' }}>
           {nextNext && (
-            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`, borderRadius: '20px', transform: 'scale(0.88) translateY(20px)', zIndex: 0, opacity: 0.6 }} />
+            <div style={{ position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '20px', transform: 'scale(0.88) translateY(20px)', zIndex: 0 }} />
           )}
           {next && (
-            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`, borderRadius: '20px', transform: 'scale(0.94) translateY(10px)', zIndex: 1, opacity: 0.8 }} />
+            <div style={{ position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '20px', transform: 'scale(0.94) translateY(10px)', zIndex: 1 }} />
           )}
-
-          {/* メインカード */}
-          <div
-            ref={cardRef}
-            onMouseDown={(e) => {
-              e.preventDefault()
-              dragStart.current = { x: e.clientX, y: e.clientY }
-              isDragging.current = true
-            }}
-            onMouseMove={(e) => {
-              if (!isDragging.current || !dragStart.current) return
-              setDragOffset({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y })
-            }}
-            onMouseUp={() => {
-              if (!isDragging.current) return
-              isDragging.current = false
-              const x = dragOffset.x
-              if (x > 80) handleSwipe('right')
-              else if (x < -80) handleSwipe('left')
-              else setDragOffset({ x: 0, y: 0 })
-              dragStart.current = null
-            }}
-            onMouseLeave={() => {
-              if (!isDragging.current) return
-              isDragging.current = false
-              setDragOffset({ x: 0, y: 0 })
-              dragStart.current = null
-            }}
-            style={{
-              position: 'absolute', inset: 0,
-              background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`,
-              borderRadius: '20px', overflow: 'hidden', zIndex: 2,
-              transform: getCardTransform(),
-              transition: animating ? 'transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
-              cursor: isDragging.current ? 'grabbing' : 'grab',
-              userSelect: 'none',
-              touchAction: 'none',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
-            }}
-          >
-            {/* LIKE / NOPE ラベル */}
-            {showLike && (
-              <div style={{
-                position: 'absolute', top: '24px', left: '20px', zIndex: 10,
-                border: '3px solid #4CD964', borderRadius: '8px', padding: '6px 16px',
-                transform: 'rotate(-15deg)', color: '#4CD964',
-                fontSize: '28px', fontWeight: '900', letterSpacing: '3px',
-                opacity: animating === 'right' ? 1 : likeOpacity,
-              }}>LIKE</div>
-            )}
-            {showNope && (
-              <div style={{
-                position: 'absolute', top: '24px', right: '20px', zIndex: 10,
-                border: '3px solid #FF3B30', borderRadius: '8px', padding: '6px 16px',
-                transform: 'rotate(15deg)', color: '#FF3B30',
-                fontSize: '28px', fontWeight: '900', letterSpacing: '3px',
-                opacity: animating === 'left' ? 1 : nopeOpacity,
-              }}>NOPE</div>
-            )}
-
-            {/* 絵文字エリア */}
+          <SwipeCard onSwipe={handleSwipe} animating={animating}>
             <div style={{
-              height: '220px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '96px',
-              background: 'rgba(255,255,255,0.05)',
-              pointerEvents: 'none',
+              position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD',
+              borderRadius: '20px', overflow: 'hidden',
             }}>
-              {current.emoji}
-            </div>
-
-            {/* 商品情報 */}
-            <div style={{ padding: '20px 24px', pointerEvents: 'none' }}>
-              <div style={{ fontSize: '20px', fontWeight: '700', color: '#fff', lineHeight: 1.3 }}>{current.name}</div>
-              <div style={{ color: '#FFD814', fontSize: '22px', marginTop: '6px', fontWeight: '700' }}>{current.price}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-                <span style={{ color: '#FFD814', fontSize: '14px' }}>★</span>
-                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)' }}>{current.rating}</span>
+              {/* 絵文字エリア */}
+              <div style={{
+                height: '220px', background: '#F8F8F8',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '96px', pointerEvents: 'none',
+              }}>
+                {current.emoji}
               </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '12px' }}>
-                {current.tags.map(tag => (
-                  <span key={tag} style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: '12px', padding: '4px 10px', borderRadius: '20px', backdropFilter: 'blur(4px)' }}>{tag}</span>
-                ))}
+              {/* 商品情報 */}
+              <div style={{ padding: '20px 24px', pointerEvents: 'none' }}>
+                <div style={{ fontSize: '20px', fontWeight: '700', color: '#0F1111', lineHeight: 1.3 }}>{current.name}</div>
+                <div style={{ color: '#B12704', fontSize: '22px', marginTop: '6px', fontWeight: '700' }}>{current.price}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                  <span style={{ color: '#FF9900', fontSize: '14px' }}>★</span>
+                  <span style={{ fontSize: '13px', color: '#565959' }}>{current.rating}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '12px' }}>
+                  {current.tags.map(tag => (
+                    <span key={tag} style={{ background: '#F3F3F3', color: '#565959', fontSize: '12px', padding: '4px 10px', borderRadius: '20px', border: '1px solid #DDD' }}>{tag}</span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          </SwipeCard>
         </div>
 
         {/* ボタン */}
