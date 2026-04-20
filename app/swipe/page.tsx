@@ -374,6 +374,7 @@ function SwipeContent() {
           <div
             ref={cardRef}
             onMouseDown={(e) => {
+              e.preventDefault()
               dragStart.current = { x: e.clientX, y: e.clientY }
               isDragging.current = true
             }}
