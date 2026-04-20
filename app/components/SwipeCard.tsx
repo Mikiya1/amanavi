@@ -31,12 +31,24 @@ export default function SwipeCard({ onSwipe, animating, children }: SwipeCardPro
     if (!isDragging.current) return
     isDragging.current = false
     const x = offsetRef.current.x
-    if (x > 80) onSwipe('right')
-    else if (x < -80) onSwipe('left')
-    else setOffset({ x: 0, y: 0 })
-    dragStart.current = null
     offsetRef.current = { x: 0, y: 0 }
+    dragStart.current = null
+    if (x > 80) {
+      onSwipe('right')
+    } else if (x < -80) {
+      onSwipe('left')
+    } else {
+      setOffset({ x: 0, y: 0 })
+    }
   }, [onSwipe])
+
+  // アニメーション終了後にoffsetをリセット
+  useEffect(() => {
+    if (!animating) {
+      setOffset({ x: 0, y: 0 })
+      offsetRef.current = { x: 0, y: 0 }
+    }
+  }, [animating])
 
   useEffect(() => {
     const card = cardRef.current
