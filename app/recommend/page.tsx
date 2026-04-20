@@ -181,6 +181,91 @@ const products: Record<string, { id: number; name: string; price: string; rating
     { id: 4, name: 'ハンガーラック', price: '¥6,800', rating: '4.5', emoji: '👗', tags: ['クローゼット', 'スリム', 'キャスター付き'], url: 'https://www.amazon.co.jp/s?k=%E3%83%8F%E3%83%B3%E3%82%AC%E3%83%BC%E3%83%A9%E3%83%83%E3%82%AF&tag=amanavi05-22' },
     { id: 5, name: 'フリーラック スチール', price: '¥9,800', rating: '4.5', emoji: '🗂', tags: ['スチール', '丈夫', 'DIY'], url: 'https://www.amazon.co.jp/s?k=%E3%83%95%E3%83%AA%E3%83%BC%E3%83%A9%E3%83%83%E3%82%AF%20%E3%82%B9%E3%83%81%E3%83%BC%E3%83%AB&tag=amanavi05-22' },
   ],
+
+  'ミラーレス一眼': [
+    { id: 1, name: 'Sony α7C II', price: '¥299,800', rating: '4.8', emoji: '📷', tags: ['Sony', 'フルサイズ', 'コンパクト'], url: 'https://www.amazon.co.jp/s?k=Sony+%CE%B17C+II&tag=amanavi05-22' },
+    { id: 2, name: 'Fujifilm X100VI', price: '¥238,000', rating: '4.8', emoji: '📷', tags: ['Fujifilm', 'フィルム風', 'コンパクト'], url: 'https://www.amazon.co.jp/s?k=Fujifilm+X100VI&tag=amanavi05-22' },
+    { id: 3, name: 'Canon EOS R50', price: '¥89,800', rating: '4.7', emoji: '📷', tags: ['Canon', '入門', '軽量'], url: 'https://www.amazon.co.jp/s?k=Canon+EOS+R50&tag=amanavi05-22' },
+    { id: 4, name: 'OM System OM-5', price: '¥149,800', rating: '4.6', emoji: '📷', tags: ['防塵防滴', 'アウトドア', 'コンパクト'], url: 'https://www.amazon.co.jp/s?k=OM+System+OM-5&tag=amanavi05-22' },
+    { id: 5, name: 'Nikon Z30', price: '¥79,800', rating: '4.6', emoji: '📷', tags: ['Nikon', '動画', '入門'], url: 'https://www.amazon.co.jp/s?k=Nikon+Z30&tag=amanavi05-22' },
+  ],
+  'アクションカメラ': [
+    { id: 1, name: 'GoPro HERO13', price: '¥59,800', rating: '4.7', emoji: '🎥', tags: ['GoPro', '防水', 'アクション'], url: 'https://www.amazon.co.jp/s?k=GoPro+HERO13&tag=amanavi05-22' },
+    { id: 2, name: 'DJI Osmo Action 5 Pro', price: '¥54,800', rating: '4.7', emoji: '🎥', tags: ['DJI', '手ぶれ補正', '4K'], url: 'https://www.amazon.co.jp/s?k=DJI+Osmo+Action+5+Pro&tag=amanavi05-22' },
+    { id: 3, name: 'Insta360 X4', price: '¥74,800', rating: '4.6', emoji: '🎥', tags: ['360度', 'Insta360', 'VR'], url: 'https://www.amazon.co.jp/s?k=Insta360+X4&tag=amanavi05-22' },
+    { id: 4, name: 'DJI Pocket 3', price: '¥79,800', rating: '4.8', emoji: '🎥', tags: ['ジンバル', '小型', 'Vlog'], url: 'https://www.amazon.co.jp/s?k=DJI+Pocket+3&tag=amanavi05-22' },
+    { id: 5, name: 'Sony ZV-1 II', price: '¥59,800', rating: '4.6', emoji: '🎥', tags: ['Sony', 'Vlog', '広角'], url: 'https://www.amazon.co.jp/s?k=Sony+ZV-1+II&tag=amanavi05-22' },
+  ],
+  'スマートスピーカー': [
+    { id: 1, name: 'Amazon Echo Dot 第5世代', price: '¥7,480', rating: '4.6', emoji: '🔊', tags: ['Alexa', 'コンパクト', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=Echo+Dot+第5世代&tag=amanavi05-22' },
+    { id: 2, name: 'Apple HomePod mini', price: '¥12,800', rating: '4.5', emoji: '🔊', tags: ['Apple', 'Siri', '音質'], url: 'https://www.amazon.co.jp/s?k=HomePod+mini&tag=amanavi05-22' },
+    { id: 3, name: 'Google Nest Audio', price: '¥11,000', rating: '4.5', emoji: '🔊', tags: ['Google', '音質', 'スマートホーム'], url: 'https://www.amazon.co.jp/s?k=Google+Nest+Audio&tag=amanavi05-22' },
+    { id: 4, name: 'Amazon Echo Show 8', price: '¥14,980', rating: '4.6', emoji: '📺', tags: ['画面付き', 'ビデオ通話', 'Alexa'], url: 'https://www.amazon.co.jp/s?k=Echo+Show+8&tag=amanavi05-22' },
+    { id: 5, name: 'Amazon Echo Pop', price: '¥4,980', rating: '4.5', emoji: '🔊', tags: ['コンパクト', 'コスパ', 'Alexa'], url: 'https://www.amazon.co.jp/s?k=Echo+Pop&tag=amanavi05-22' },
+  ],
+  'スキンケア': [
+    { id: 1, name: 'SK-II フェイシャルトリートメントエッセンス', price: '¥16,500', rating: '4.7', emoji: '🧴', tags: ['SK-II', '美容液', 'ピテラ'], url: 'https://www.amazon.co.jp/s?k=SK-II+フェイシャルトリートメント&tag=amanavi05-22' },
+    { id: 2, name: 'COSRX ナイアシンアミドセラム', price: '¥2,980', rating: '4.6', emoji: '🧴', tags: ['韓国コスメ', 'ニキビ跡', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=COSRX+ナイアシンアミド&tag=amanavi05-22' },
+    { id: 3, name: 'ドクタージャルト シカペア', price: '¥4,500', rating: '4.6', emoji: '🟢', tags: ['敏感肌', '鎮静', '韓国コスメ'], url: 'https://www.amazon.co.jp/s?k=ドクタージャルト+シカペア&tag=amanavi05-22' },
+    { id: 4, name: 'Anessa 日焼け止め', price: '¥1,980', rating: '4.8', emoji: '☀️', tags: ['日焼け止め', 'SPF50+', 'ウォータープルーフ'], url: 'https://www.amazon.co.jp/s?k=Anessa+日焼け止め&tag=amanavi05-22' },
+    { id: 5, name: 'クレ・ド・ポー ボーテ 美容液', price: '¥19,800', rating: '4.7', emoji: '✨', tags: ['高級', '美白', 'ハリ'], url: 'https://www.amazon.co.jp/s?k=クレドポーボーテ+美容液&tag=amanavi05-22' },
+  ],
+  '美容家電': [
+    { id: 1, name: 'Dyson Supersonic', price: '¥59,400', rating: '4.7', emoji: '💨', tags: ['ダイソン', 'ドライヤー', '速乾'], url: 'https://www.amazon.co.jp/s?k=Dyson+Supersonic&tag=amanavi05-22' },
+    { id: 2, name: 'ヤーマン 美顔器 RF', price: '¥29,800', rating: '4.5', emoji: '✨', tags: ['RF美顔器', 'リフトアップ', 'EMS'], url: 'https://www.amazon.co.jp/s?k=ヤーマン+美顔器&tag=amanavi05-22' },
+    { id: 3, name: 'パナソニック ヘアアイロン', price: '¥14,800', rating: '4.7', emoji: '💇', tags: ['ストレート', 'イオン', 'パナソニック'], url: 'https://www.amazon.co.jp/s?k=パナソニック+ヘアアイロン&tag=amanavi05-22' },
+    { id: 4, name: 'Braun 電気シェーバー', price: '¥24,800', rating: '4.7', emoji: '🪒', tags: ['シェーバー', '防水', 'Braun'], url: 'https://www.amazon.co.jp/s?k=Braun+電気シェーバー&tag=amanavi05-22' },
+    { id: 5, name: 'ケノン 脱毛器', price: '¥69,800', rating: '4.5', emoji: '💡', tags: ['家庭用脱毛', 'フラッシュ', '全身'], url: 'https://www.amazon.co.jp/s?k=ケノン+脱毛器&tag=amanavi05-22' },
+  ],
+  'お菓子・スイーツ': [
+    { id: 1, name: 'ロイズ 生チョコレート', price: '¥1,296', rating: '4.8', emoji: '🍫', tags: ['北海道', 'チョコ', 'ギフト'], url: 'https://www.amazon.co.jp/s?k=ロイズ+生チョコレート&tag=amanavi05-22' },
+    { id: 2, name: 'メリーチョコレート 缶', price: '¥2,160', rating: '4.7', emoji: '🍬', tags: ['ギフト', 'アソート', '缶'], url: 'https://www.amazon.co.jp/s?k=メリーチョコレート&tag=amanavi05-22' },
+    { id: 3, name: 'ポップコーン カラフル', price: '¥1,980', rating: '4.6', emoji: '🍿', tags: ['おつまみ', 'カラフル', 'パーティー'], url: 'https://www.amazon.co.jp/s?k=カラフルポップコーン&tag=amanavi05-22' },
+    { id: 4, name: 'ハリボー グミ 大袋', price: '¥998', rating: '4.7', emoji: '🐻', tags: ['グミ', 'ハリボー', 'お徳用'], url: 'https://www.amazon.co.jp/s?k=ハリボー+グミ&tag=amanavi05-22' },
+    { id: 5, name: 'GODIVAチョコレート', price: '¥3,240', rating: '4.7', emoji: '🍫', tags: ['高級', 'ギフト', 'ベルギー'], url: 'https://www.amazon.co.jp/s?k=GODIVA+チョコレート&tag=amanavi05-22' },
+  ],
+  'サプリメント': [
+    { id: 1, name: 'NOW Foods ビタミンC', price: '¥2,480', rating: '4.7', emoji: '🍋', tags: ['ビタミンC', '免疫', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=NOW+Foods+ビタミンC&tag=amanavi05-22' },
+    { id: 2, name: 'DHC マルチビタミン', price: '¥598', rating: '4.6', emoji: '💊', tags: ['DHC', '総合ビタミン', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=DHC+マルチビタミン&tag=amanavi05-22' },
+    { id: 3, name: 'Nature Made マグネシウム', price: '¥1,980', rating: '4.6', emoji: '💪', tags: ['マグネシウム', '睡眠', '筋肉'], url: 'https://www.amazon.co.jp/s?k=Nature+Made+マグネシウム&tag=amanavi05-22' },
+    { id: 4, name: 'オメガ3 フィッシュオイル', price: '¥2,980', rating: '4.5', emoji: '🐟', tags: ['DHA', 'EPA', '心臓'], url: 'https://www.amazon.co.jp/s?k=オメガ3+フィッシュオイル&tag=amanavi05-22' },
+    { id: 5, name: 'BCAA アミノ酸', price: '¥3,480', rating: '4.6', emoji: '🧪', tags: ['BCAA', '筋トレ', '回復'], url: 'https://www.amazon.co.jp/s?k=BCAA+アミノ酸&tag=amanavi05-22' },
+  ],
+  '犬用品': [
+    { id: 1, name: 'コングクラシック', price: '¥1,280', rating: '4.7', emoji: '🐶', tags: ['おもちゃ', '知育', 'ゴム'], url: 'https://www.amazon.co.jp/s?k=コング+クラシック&tag=amanavi05-22' },
+    { id: 2, name: 'ロイヤルカナン 中型犬', price: '¥6,980', rating: '4.7', emoji: '🦴', tags: ['ロイヤルカナン', 'ドッグフード', '総合栄養食'], url: 'https://www.amazon.co.jp/s?k=ロイヤルカナン+中型犬&tag=amanavi05-22' },
+    { id: 3, name: 'フレキシリード', price: '¥2,980', rating: '4.5', emoji: '🐕', tags: ['伸縮リード', '散歩', 'フレキシ'], url: 'https://www.amazon.co.jp/s?k=フレキシリード&tag=amanavi05-22' },
+    { id: 4, name: 'ペット用キャリーバッグ', price: '¥4,980', rating: '4.5', emoji: '👜', tags: ['キャリー', '持ち運び', '通院'], url: 'https://www.amazon.co.jp/s?k=ペット+キャリーバッグ+犬&tag=amanavi05-22' },
+    { id: 5, name: 'GEX おでかけカート', price: '¥14,800', rating: '4.4', emoji: '🛒', tags: ['カート', '小型犬', '散歩'], url: 'https://www.amazon.co.jp/s?k=GEX+ペットカート&tag=amanavi05-22' },
+  ],
+  '猫用品': [
+    { id: 1, name: 'キャットタワー 大型', price: '¥9,800', rating: '4.5', emoji: '🐱', tags: ['キャットタワー', '多頭', '大型'], url: 'https://www.amazon.co.jp/s?k=キャットタワー+大型&tag=amanavi05-22' },
+    { id: 2, name: 'ロイヤルカナン 猫用', price: '¥4,980', rating: '4.7', emoji: '🐟', tags: ['キャットフード', 'ロイヤルカナン', '総合栄養食'], url: 'https://www.amazon.co.jp/s?k=ロイヤルカナン+猫&tag=amanavi05-22' },
+    { id: 3, name: 'じゃらし おもちゃ', price: '¥980', rating: '4.6', emoji: '🪶', tags: ['おもちゃ', 'じゃらし', '運動'], url: 'https://www.amazon.co.jp/s?k=猫+じゃらし&tag=amanavi05-22' },
+    { id: 4, name: 'システムトイレ デオトイレ', price: '¥4,480', rating: '4.6', emoji: '🚽', tags: ['システムトイレ', '消臭', 'デオトイレ'], url: 'https://www.amazon.co.jp/s?k=デオトイレ&tag=amanavi05-22' },
+    { id: 5, name: '自動給水器 ピュアクリスタル', price: '¥3,980', rating: '4.6', emoji: '💧', tags: ['給水器', '自動', '猫'], url: 'https://www.amazon.co.jp/s?k=ピュアクリスタル+猫&tag=amanavi05-22' },
+  ],
+  'おもちゃ': [
+    { id: 1, name: 'レゴ クラシック', price: '¥4,980', rating: '4.8', emoji: '🧱', tags: ['レゴ', '知育', '創造力'], url: 'https://www.amazon.co.jp/s?k=レゴ+クラシック&tag=amanavi05-22' },
+    { id: 2, name: 'プラレール 新幹線', price: '¥3,480', rating: '4.7', emoji: '🚄', tags: ['プラレール', '電車', '男の子'], url: 'https://www.amazon.co.jp/s?k=プラレール+新幹線&tag=amanavi05-22' },
+    { id: 3, name: 'シルバニアファミリー', price: '¥3,980', rating: '4.8', emoji: '🐰', tags: ['シルバニア', '女の子', 'ままごと'], url: 'https://www.amazon.co.jp/s?k=シルバニアファミリー&tag=amanavi05-22' },
+    { id: 4, name: 'ニンテンドー ゲームウォッチ', price: '¥5,478', rating: '4.6', emoji: '🎮', tags: ['任天堂', 'レトロ', 'コレクション'], url: 'https://www.amazon.co.jp/s?k=ゲームウォッチ&tag=amanavi05-22' },
+    { id: 5, name: 'タカラトミー 人生ゲーム', price: '¥4,200', rating: '4.6', emoji: '🎲', tags: ['ボードゲーム', 'ファミリー', 'パーティー'], url: 'https://www.amazon.co.jp/s?k=タカラトミー+人生ゲーム&tag=amanavi05-22' },
+  ],
+  '電動工具': [
+    { id: 1, name: 'マキタ 充電式ドリルドライバ', price: '¥19,800', rating: '4.8', emoji: '🔧', tags: ['マキタ', 'コードレス', 'DIY'], url: 'https://www.amazon.co.jp/s?k=マキタ+充電式ドリル&tag=amanavi05-22' },
+    { id: 2, name: 'Bosch インパクトドライバー', price: '¥24,800', rating: '4.7', emoji: '🔩', tags: ['Bosch', 'プロ', 'インパクト'], url: 'https://www.amazon.co.jp/s?k=Bosch+インパクトドライバー&tag=amanavi05-22' },
+    { id: 3, name: '電動サンダー', price: '¥8,980', rating: '4.5', emoji: '🪚', tags: ['研磨', '仕上げ', 'DIY'], url: 'https://www.amazon.co.jp/s?k=電動サンダー+DIY&tag=amanavi05-22' },
+    { id: 4, name: 'レーザー距離計', price: '¥5,980', rating: '4.7', emoji: '📏', tags: ['測定', 'レーザー', '精度'], url: 'https://www.amazon.co.jp/s?k=レーザー距離計&tag=amanavi05-22' },
+    { id: 5, name: 'ドリルビット セット', price: '¥2,980', rating: '4.6', emoji: '🔩', tags: ['ビット', 'セット', 'コスパ'], url: 'https://www.amazon.co.jp/s?k=ドリルビット+セット&tag=amanavi05-22' },
+  ],
+  'ドライブレコーダー': [
+    { id: 1, name: 'VANTRUE N4 前後3カメラ', price: '¥29,800', rating: '4.7', emoji: '📹', tags: ['3カメラ', '前後', '駐車監視'], url: 'https://www.amazon.co.jp/s?k=VANTRUE+N4&tag=amanavi05-22' },
+    { id: 2, name: 'Garmin Dash Cam Mini2', price: '¥9,800', rating: '4.6', emoji: '📹', tags: ['小型', 'Garmin', 'シンプル'], url: 'https://www.amazon.co.jp/s?k=Garmin+Dash+Cam+Mini2&tag=amanavi05-22' },
+    { id: 3, name: 'ユピテル SN-TW9600d', price: '¥24,800', rating: '4.5', emoji: '📹', tags: ['前後', '4K', 'ユピテル'], url: 'https://www.amazon.co.jp/s?k=ユピテル+ドライブレコーダー&tag=amanavi05-22' },
+    { id: 4, name: 'Nextbase 622GW', price: '¥34,800', rating: '4.6', emoji: '📹', tags: ['4K', 'WiFi', '手ぶれ補正'], url: 'https://www.amazon.co.jp/s?k=Nextbase+622GW&tag=amanavi05-22' },
+    { id: 5, name: 'コムテック ZDR035', price: '¥19,800', rating: '4.7', emoji: '📹', tags: ['前後', '駐車監視', 'コムテック'], url: 'https://www.amazon.co.jp/s?k=コムテック+ZDR035&tag=amanavi05-22' },
+  ],
   '掃除': [
     { id: 1, name: 'ルンバ j7+', price: '¥99,800', rating: '4.5', emoji: '🤖', tags: ['ロボット掃除機', '自動ゴミ収集', 'iRobot'], url: 'https://www.amazon.co.jp/s?k=%E3%83%AB%E3%83%B3%E3%83%90%20j7%2B&tag=amanavi05-22' },
     { id: 2, name: 'ダイソン V15', price: '¥89,800', rating: '4.7', emoji: '🌀', tags: ['コードレス', '強力吸引', 'ダイソン'], url: 'https://www.amazon.co.jp/s?k=%E3%83%80%E3%82%A4%E3%82%BD%E3%83%B3%20V15&tag=amanavi05-22' },
@@ -199,13 +284,22 @@ function RecommendContent() {
   const tagsParam = searchParams.get('tags') ?? ''
   const likedTags = tagsParam ? tagsParam.split(',') : []
 
-  // 全LIKEカテゴリの商品をまとめて取得
+  // LIKEしたカテゴリの商品のみ取得（なければ全カテゴリ）
   const allItems = categoryList.flatMap(cat => products[cat] ?? [])
 
+  // タグスコアでソート（LIKEしたタグが多いほど上位）
   const scored = allItems.map(item => ({
     ...item,
     score: item.tags.filter(t => likedTags.includes(t)).length,
   })).sort((a, b) => b.score - a.score)
+
+  // スコア0の商品は除外（タグが一致しないものは表示しない）
+  const filtered = likedTags.length > 0
+    ? scored.filter(item => item.score > 0)
+    : scored
+
+  // filteredが空の場合はscoredの上位5件を使う
+  const displayItems = filtered.length > 0 ? filtered : scored.slice(0, 5)
 
   const reason = likedTags.length > 0
     ? `${[...new Set(likedTags)].slice(0, 3).join('・')}に興味があるあなたへ`
@@ -234,7 +328,7 @@ function RecommendContent() {
 
         {/* 商品リスト */}
         <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-          {scored.map((item, i) => (
+          {displayItems.map((item, i) => (
             <div
               key={`${item.id}-${i}`}
               style={{

@@ -3,93 +3,114 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '../components/Header'
-import SwipeCard from '../components/SwipeCard'
 
 const genres = [
-  { id: 1, name: 'ガジェット', emoji: '📱', desc: 'スマホ・イヤホン・カメラ・PC周辺機器' },
-  { id: 2, name: 'ゲーム',     emoji: '🎮', desc: 'ソフト・コントローラー・周辺機器' },
-  { id: 3, name: '本・漫画',   emoji: '📚', desc: 'ビジネス書・小説・漫画・雑誌' },
-  { id: 4, name: 'ファッション', emoji: '👕', desc: 'トップス・パンツ・シューズ・バッグ' },
-  { id: 5, name: 'インテリア', emoji: '🛋', desc: '家具・照明・雑貨・収納' },
-  { id: 6, name: 'スポーツ',   emoji: '⚽', desc: 'トレーニング・アウトドア・ウェア' },
+  // ガジェット・テック
+  { name: 'ガジェット', emoji: '📱', desc: 'スマホ・イヤホン・PC周辺', color: '#1a1a2e' },
+  { name: 'ゲーム', emoji: '🎮', desc: 'Switch・PS5・PCゲーム', color: '#0f3460' },
+  { name: 'カメラ', emoji: '📷', desc: '一眼・ミラーレス・アクション', color: '#1a2a1a' },
+  { name: 'スマートホーム', emoji: '🏠', desc: '音声アシスト・スマート家電', color: '#2a1a2a' },
+  // ライフスタイル
+  { name: 'ファッション', emoji: '👕', desc: 'トップス・シューズ・バッグ', color: '#3d1a1a' },
+  { name: 'コスメ・美容', emoji: '💄', desc: 'スキンケア・メイク・香水', color: '#3d1a2d' },
+  { name: 'インテリア', emoji: '🛋', desc: '家電・照明・収納', color: '#1a2d3d' },
+  { name: '食品・グルメ', emoji: '🍜', desc: 'お菓子・調味料・お取り寄せ', color: '#3d2a1a' },
+  // 趣味・エンタメ
+  { name: '本・漫画', emoji: '📚', desc: 'ビジネス書・小説・漫画', color: '#2d4a22' },
+  { name: 'スポーツ', emoji: '⚽', desc: 'トレーニング・アウトドア', color: '#1a3d2d' },
+  { name: '音楽', emoji: '🎸', desc: '楽器・DTM・レコード', color: '#2d1a3d' },
+  { name: 'ホビー', emoji: '🎨', desc: 'プラモデル・フィギュア・手芸', color: '#1a2a3d' },
+  // 生活・実用
+  { name: '健康・医療', emoji: '💊', desc: 'サプリ・医療機器・マッサージ', color: '#1a3a2a' },
+  { name: 'ペット', emoji: '🐾', desc: '犬・猫・小動物グッズ', color: '#2a3a1a' },
+  { name: 'DIY・工具', emoji: '🔧', desc: '電動工具・塗料・材料', color: '#2a2a1a' },
+  { name: 'カー用品', emoji: '🚗', desc: 'カーナビ・パーツ・ケア用品', color: '#1a1a3a' },
+  // ベビー・キッズ
+  { name: 'ベビー・キッズ', emoji: '🍼', desc: 'おもちゃ・育児グッズ', color: '#3a1a3a' },
+  { name: '学習・教育', emoji: '✏️', desc: '参考書・知育・文具', color: '#1a3a3a' },
 ]
 
 export default function GenrePage() {
   const router = useRouter()
-  const [index, setIndex] = useState(0)
-  const [likedGenres, setLikedGenres] = useState<string[]>([])
-  const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
+  const [selected, setSelected] = useState<string[]>([])
 
-  const current = genres[index]
-  const next = genres[index + 1]
+  const toggle = (name: string) => {
+    setSelected(prev =>
+      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
+    )
+  }
 
-  const handleSwipe = (dir: 'left' | 'right') => {
-    if (animating) return
-    setAnimating(dir)
-    const newLiked = dir === 'right' ? [...likedGenres, current.name] : likedGenres
-    if (dir === 'right') setLikedGenres(newLiked)
-
-    setTimeout(() => {
-      setAnimating(null)
-      if (index + 1 >= genres.length) {
-        const selected = dir === 'right' ? newLiked : likedGenres
-        router.push(`/category?genres=${selected.length > 0 ? selected.join(',') : 'ガジェット'}`)
-      } else {
-        setIndex(prev => prev + 1)
-      }
-    }, 320)
+  const handleNext = () => {
+    if (selected.length === 0) return
+    router.push(`/category?genres=${selected.join(',')}`)
   }
 
   return (
     <>
       <Header />
-      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', maxWidth: '480px', margin: '0 auto', paddingBottom: '100px' }}>
 
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', color: '#565959', fontSize: '14px', padding: 0, cursor: 'pointer' }}>← 戻る</button>
-          <span style={{ color: '#565959', fontSize: '14px' }}>{index + 1} / {genres.length}</span>
+        {/* ヘッダー */}
+        <div style={{ background: '#131921', padding: '20px 16px 24px' }}>
+          <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: '13px', padding: 0, cursor: 'pointer', marginBottom: '12px', display: 'block' }}>← 戻る</button>
+          <div style={{ fontSize: '11px', color: '#FF9900', fontWeight: '700', marginBottom: '6px' }}>STEP 1</div>
+          <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', marginBottom: '6px' }}>興味あるジャンルを選ぼう</div>
+          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>複数選択できます（{selected.length}個選択中）</div>
         </div>
 
-        <div style={{ width: '100%', marginBottom: '8px' }}>
-          <div style={{ fontSize: '12px', color: '#FF9900', fontWeight: '700', marginBottom: '4px' }}>STEP 1</div>
-          <div style={{ fontSize: '20px', fontWeight: '700' }}>興味あるジャンルは？</div>
-          <div style={{ fontSize: '13px', color: '#565959', marginTop: '4px' }}>全部スワイプしてから次へ進みます</div>
+        {/* ジャンルグリッド */}
+        <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          {genres.map(g => {
+            const isSelected = selected.includes(g.name)
+            return (
+              <button
+                key={g.name}
+                onClick={() => toggle(g.name)}
+                style={{
+                  background: isSelected ? g.color : '#fff',
+                  border: isSelected ? '2px solid #FF9900' : '1px solid #DDD',
+                  borderRadius: '14px',
+                  padding: '16px 14px',
+                  textAlign: 'left',
+                  color: isSelected ? '#fff' : '#0F1111',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 0.15s',
+                  boxShadow: isSelected ? '0 4px 16px rgba(255,153,0,0.3)' : 'none',
+                }}
+              >
+                {isSelected && (
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#FF9900', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '800', color: '#fff' }}>✓</div>
+                )}
+                <div style={{ fontSize: '28px', marginBottom: '6px' }}>{g.emoji}</div>
+                <div style={{ fontSize: '13px', fontWeight: '700' }}>{g.name}</div>
+                <div style={{ fontSize: '11px', color: isSelected ? 'rgba(255,255,255,0.6)' : '#888', marginTop: '3px' }}>{g.desc}</div>
+              </button>
+            )
+          })}
         </div>
 
-        <div style={{ width: '100%', height: '4px', background: '#DDD', borderRadius: '2px', marginBottom: '16px' }}>
-          <div style={{ height: '100%', background: '#FF9900', borderRadius: '2px', width: `${((index + 1) / genres.length) * 100}%`, transition: 'width 0.3s' }} />
+        {/* 次へボタン（固定） */}
+        <div style={{ position: 'fixed', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: '480px', padding: '16px', background: 'rgba(243,243,243,0.95)', backdropFilter: 'blur(8px)', borderTop: '1px solid #DDD' }}>
+          <button
+            onClick={handleNext}
+            disabled={selected.length === 0}
+            style={{
+              width: '100%',
+              background: selected.length > 0 ? 'linear-gradient(90deg, #FFD814, #FF9900)' : '#DDD',
+              color: selected.length > 0 ? '#0F1111' : '#999',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '14px',
+              fontSize: '16px',
+              fontWeight: '800',
+              cursor: selected.length > 0 ? 'pointer' : 'not-allowed',
+              boxShadow: selected.length > 0 ? '0 4px 16px rgba(255,153,0,0.3)' : 'none',
+            }}
+          >
+            {selected.length > 0 ? `${selected.length}個のジャンルで探す →` : 'ジャンルを選んでください'}
+          </button>
         </div>
-
-        {likedGenres.length > 0 && (
-          <div style={{ width: '100%', display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {likedGenres.map(g => (
-              <span key={g} style={{ background: '#FFF3CD', color: '#FF9900', fontSize: '12px', padding: '4px 10px', borderRadius: '20px', border: '1px solid #FF9900' }}>{g}</span>
-            ))}
-          </div>
-        )}
-
-        <div style={{ width: '100%', position: 'relative', height: '320px', marginBottom: '24px' }}>
-          {next && (
-            <div style={{ position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', transform: 'scale(0.95) translateY(8px)', zIndex: 0 }} />
-          )}
-          <SwipeCard onSwipe={handleSwipe} animating={animating}>
-            <div style={{
-              position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', overflow: 'hidden',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '32px',
-            }}>
-              <div style={{ fontSize: '80px', pointerEvents: 'none' }}>{current.emoji}</div>
-              <div style={{ fontSize: '28px', fontWeight: '700', textAlign: 'center', color: '#0F1111', pointerEvents: 'none' }}>{current.name}</div>
-              <div style={{ fontSize: '14px', color: '#565959', textAlign: 'center', lineHeight: 1.6, pointerEvents: 'none' }}>{current.desc}</div>
-            </div>
-          </SwipeCard>
-        </div>
-
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button onClick={() => handleSwipe('left')} style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px solid #DDD', background: '#fff', fontSize: '26px', color: '#565959', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>✕</button>
-          <button onClick={() => handleSwipe('right')} style={{ width: '72px', height: '72px', borderRadius: '50%', border: 'none', background: '#FFD814', fontSize: '28px', color: '#0F1111', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>♥</button>
-        </div>
-
-        <div style={{ marginTop: '16px', fontSize: '12px', color: '#888' }}>← 興味なし ／ 興味あり →</div>
       </main>
     </>
   )
