@@ -1,11 +1,22 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
-import SwipeCard from '../components/SwipeCard'
 
 const categories: Record<string, { id: number; name: string; emoji: string; desc: string }[]> = {
+  'ガジェット': [
+    { id: 1, name: 'スマホ', emoji: '📱', desc: 'iPhone・Android・アクセサリ' },
+    { id: 2, name: 'タブレット', emoji: '📲', desc: 'iPad・Androidタブレット' },
+    { id: 3, name: 'イヤホン', emoji: '🎧', desc: 'ワイヤレス・ノイキャン・有線' },
+    { id: 4, name: 'モニター', emoji: '🖥', desc: 'ゲーミング・4K・ウルトラワイド' },
+    { id: 5, name: 'PC周辺機器', emoji: '⌨️', desc: 'キーボード・マウス・Webカメラ' },
+  ],
+  'ゲーム': [
+    { id: 1, name: 'Nintendo Switch', emoji: '🎮', desc: 'ソフト・周辺機器・アクセサリ' },
+    { id: 2, name: 'PlayStation', emoji: '🕹', desc: 'PS5・PS4・コントローラー' },
+    { id: 3, name: 'PCゲーム', emoji: '💻', desc: 'ゲーミングPC・マウス・ヘッドセット' },
+  ],
   'カメラ': [
     { id: 1, name: 'ミラーレス一眼', emoji: '📷', desc: 'Sony・Fujifilm・Canon' },
     { id: 2, name: 'アクションカメラ', emoji: '🎥', desc: 'GoPro・DJI・Insta360' },
@@ -20,6 +31,13 @@ const categories: Record<string, { id: number; name: string; emoji: string; desc
     { id: 4, name: 'スマート家電', emoji: '🏠', desc: 'ロボット掃除機・自動給餌器' },
     { id: 5, name: 'Wi-Fi・ネットワーク', emoji: '📡', desc: 'ルーター・メッシュWi-Fi' },
   ],
+  'ファッション': [
+    { id: 1, name: 'トップス', emoji: '👕', desc: 'Tシャツ・シャツ・パーカー' },
+    { id: 2, name: 'シューズ', emoji: '👟', desc: 'スニーカー・ブーツ・サンダル' },
+    { id: 3, name: 'バッグ', emoji: '🎒', desc: 'リュック・トート・ショルダー' },
+    { id: 4, name: 'アクセサリ', emoji: '⌚', desc: '時計・サングラス・帽子' },
+    { id: 5, name: 'アウター', emoji: '🧥', desc: 'ジャケット・コート・ダウン' },
+  ],
   'コスメ・美容': [
     { id: 1, name: 'スキンケア', emoji: '🧴', desc: '化粧水・美容液・クリーム' },
     { id: 2, name: 'メイク', emoji: '💄', desc: 'ファンデ・リップ・アイシャドウ' },
@@ -27,12 +45,31 @@ const categories: Record<string, { id: number; name: string; emoji: string; desc
     { id: 4, name: '香水', emoji: '🌸', desc: 'フレグランス・ボディミスト' },
     { id: 5, name: '美容家電', emoji: '✨', desc: '美顔器・脱毛器・ヘアアイロン' },
   ],
+  'インテリア': [
+    { id: 1, name: 'キッチン家電', emoji: '🍳', desc: 'トースター・ミキサー・電気ケトル' },
+    { id: 2, name: '空調・空気', emoji: '💨', desc: '空気清浄機・扇風機・加湿器' },
+    { id: 3, name: '照明', emoji: '💡', desc: 'シーリング・スタンド・スマート照明' },
+    { id: 4, name: '収納', emoji: '📦', desc: 'ボックス・棚・ハンガーラック' },
+    { id: 5, name: '掃除', emoji: '🤖', desc: 'ロボット掃除機・コードレス・モップ' },
+  ],
   '食品・グルメ': [
     { id: 1, name: 'お菓子・スイーツ', emoji: '🍫', desc: 'チョコ・クッキー・ケーキ' },
     { id: 2, name: 'コーヒー・お茶', emoji: '☕', desc: '豆・ティーバッグ・抹茶' },
     { id: 3, name: 'お取り寄せグルメ', emoji: '🍱', desc: '肉・海産物・ご当地グルメ' },
     { id: 4, name: '調味料・パントリー', emoji: '🧂', desc: 'オリーブオイル・スパイス・だし' },
     { id: 5, name: 'お酒', emoji: '🍺', desc: 'クラフトビール・ワイン・日本酒' },
+  ],
+  '本・漫画': [
+    { id: 1, name: 'ビジネス書', emoji: '💼', desc: '自己啓発・マーケティング・投資' },
+    { id: 2, name: '漫画', emoji: '📕', desc: '少年・少女・青年・完結済み' },
+    { id: 3, name: '小説', emoji: '📖', desc: 'ミステリー・SF・恋愛・ファンタジー' },
+  ],
+  'スポーツ': [
+    { id: 1, name: '筋トレ', emoji: '💪', desc: 'ダンベル・プロテイン・ベンチ' },
+    { id: 2, name: 'ランニング', emoji: '🏃', desc: 'シューズ・ウェア・スマートウォッチ' },
+    { id: 3, name: 'アウトドア', emoji: '⛺', desc: 'テント・バーベキュー・登山' },
+    { id: 4, name: 'ヨガ・ストレッチ', emoji: '🧘', desc: 'マット・ブロック・ウェア' },
+    { id: 5, name: '球技', emoji: '⚽', desc: 'サッカー・バスケ・テニス' },
   ],
   '音楽': [
     { id: 1, name: 'ギター', emoji: '🎸', desc: 'アコギ・エレキ・ベース' },
@@ -90,44 +127,6 @@ const categories: Record<string, { id: number; name: string; emoji: string; desc
     { id: 4, name: 'タブレット学習', emoji: '📱', desc: 'スタディタブレット・教材' },
     { id: 5, name: '語学学習', emoji: '🌍', desc: '英語・中国語・テキスト' },
   ],
-  'ガジェット': [
-    { id: 1, name: 'スマホ', emoji: '📱', desc: 'iPhone・Android・アクセサリ' },
-    { id: 2, name: 'タブレット', emoji: '📲', desc: 'iPad・Androidタブレット' },
-    { id: 3, name: 'イヤホン', emoji: '🎧', desc: 'ワイヤレス・ノイキャン・有線' },
-    { id: 4, name: 'モニター', emoji: '🖥', desc: 'ゲーミング・4K・ウルトラワイド' },
-    { id: 5, name: 'PC周辺機器', emoji: '⌨️', desc: 'キーボード・マウス・Webカメラ' },
-  ],
-  'ゲーム': [
-    { id: 1, name: 'Nintendo Switch', emoji: '🎮', desc: 'ソフト・周辺機器・アクセサリ' },
-    { id: 2, name: 'PlayStation', emoji: '🕹', desc: 'PS5・PS4・コントローラー' },
-    { id: 3, name: 'PCゲーム', emoji: '💻', desc: 'ゲーミングPC・マウス・ヘッドセット' },
-  ],
-  '本・漫画': [
-    { id: 1, name: 'ビジネス書', emoji: '💼', desc: '自己啓発・マーケティング・投資' },
-    { id: 2, name: '漫画', emoji: '📕', desc: '少年・少女・青年・完結済み' },
-    { id: 3, name: '小説', emoji: '📖', desc: 'ミステリー・SF・恋愛・ファンタジー' },
-  ],
-  'ファッション': [
-    { id: 1, name: 'トップス', emoji: '👕', desc: 'Tシャツ・シャツ・パーカー' },
-    { id: 2, name: 'シューズ', emoji: '👟', desc: 'スニーカー・ブーツ・サンダル' },
-    { id: 3, name: 'バッグ', emoji: '🎒', desc: 'リュック・トート・ショルダー' },
-    { id: 4, name: 'アクセサリ', emoji: '⌚', desc: '時計・サングラス・帽子' },
-    { id: 5, name: 'アウター', emoji: '🧥', desc: 'ジャケット・コート・ダウン' },
-  ],
-  'インテリア': [
-    { id: 1, name: 'キッチン家電', emoji: '🍳', desc: 'トースター・ミキサー・電気ケトル' },
-    { id: 2, name: '空調・空気', emoji: '💨', desc: '空気清浄機・扇風機・加湿器' },
-    { id: 3, name: '照明', emoji: '💡', desc: 'シーリング・スタンド・スマート照明' },
-    { id: 4, name: '収納', emoji: '📦', desc: 'ボックス・棚・ハンガーラック' },
-    { id: 5, name: '掃除', emoji: '🤖', desc: 'ロボット掃除機・コードレス・モップ' },
-  ],
-  'スポーツ': [
-    { id: 1, name: '筋トレ', emoji: '💪', desc: 'ダンベル・プロテイン・ベンチ' },
-    { id: 2, name: 'ランニング', emoji: '🏃', desc: 'シューズ・ウェア・スマートウォッチ' },
-    { id: 3, name: 'アウトドア', emoji: '⛺', desc: 'テント・バーベキュー・登山' },
-    { id: 4, name: 'ヨガ・ストレッチ', emoji: '🧘', desc: 'マット・ブロック・ウェア' },
-    { id: 5, name: '球技', emoji: '⚽', desc: 'サッカー・バスケ・テニス' },
-  ],
 }
 
 function CategoryContent() {
@@ -140,90 +139,59 @@ function CategoryContent() {
     (categories[genre] ?? []).map(item => ({ ...item, genre }))
   )
 
-  const [index, setIndex] = useState(0)
-  const [likedCategories, setLikedCategories] = useState<{ name: string; genre: string }[]>([])
-  const [animating, setAnimating] = useState<'left' | 'right' | null>(null)
-
-  const current = allItems[index]
-  const next = allItems[index + 1]
-
-  const handleSwipe = (dir: 'left' | 'right') => {
-    if (animating) return
-    setAnimating(dir)
-    const newLiked = dir === 'right'
-      ? [...likedCategories, { name: current.name, genre: current.genre }]
-      : likedCategories
-    if (dir === 'right') setLikedCategories(newLiked)
-
-    setTimeout(() => {
-      setAnimating(null)
-      if (index + 1 >= allItems.length) {
-        const selected = dir === 'right' ? newLiked : likedCategories
-        if (selected.length === 0) {
-          // 全部スキップなら最初のカテゴリへ
-          router.push(`/refine?genre=${genres[0]}&category=${allItems[0].name}`)
-        } else {
-          // LIKEした全カテゴリをカンマ区切りで渡す
-          const category = selected[0].name
-          const genre = selected[0].genre
-          router.push(`/refine?genre=${genre}&category=${category}`)
-        }
-      } else {
-        setIndex(prev => prev + 1)
-      }
-    }, 320)
+  const handleSelect = (item: { name: string; genre: string }) => {
+    router.push(`/refine?genre=${item.genre}&category=${item.name}`)
   }
 
   return (
     <>
       <Header />
-      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', fontFamily: 'sans-serif', maxWidth: '480px', margin: '0 auto', paddingBottom: '40px' }}>
 
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <button onClick={() => router.push('/genre')} style={{ background: 'none', border: 'none', color: '#565959', fontSize: '14px', padding: 0, cursor: 'pointer' }}>← 戻る</button>
-          <span style={{ color: '#565959', fontSize: '14px' }}>{index + 1} / {allItems.length}</span>
+        <div style={{ background: '#131921', padding: '20px 16px 24px', marginBottom: '16px' }}>
+          <button onClick={() => router.push('/genre')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: '13px', padding: 0, cursor: 'pointer', marginBottom: '12px', display: 'block' }}>← 戻る</button>
+          <div style={{ fontSize: '11px', color: '#FF9900', fontWeight: '700', marginBottom: '6px' }}>STEP 2</div>
+          <div style={{ fontSize: '22px', fontWeight: '800', color: '#fff', marginBottom: '6px' }}>カテゴリを選ぼう</div>
+          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>気になるカテゴリをタップ</div>
         </div>
 
-        <div style={{ width: '100%', marginBottom: '8px' }}>
-          <div style={{ fontSize: '12px', color: '#FF9900', fontWeight: '700', marginBottom: '4px' }}>STEP 2 · {current?.genre}</div>
-          <div style={{ fontSize: '20px', fontWeight: '700' }}>カテゴリを選ぼう</div>
-          <div style={{ fontSize: '13px', color: '#565959', marginTop: '4px' }}>気になったら右、興味なければ左</div>
-        </div>
-
-        <div style={{ width: '100%', height: '4px', background: '#DDD', borderRadius: '2px', marginBottom: '16px' }}>
-          <div style={{ height: '100%', background: '#FF9900', borderRadius: '2px', width: `${((index + 1) / allItems.length) * 100}%`, transition: 'width 0.3s' }} />
-        </div>
-
-        {likedCategories.length > 0 && (
-          <div style={{ width: '100%', display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {likedCategories.map((c, i) => (
-              <span key={i} style={{ background: '#FFF3CD', color: '#FF9900', fontSize: '12px', padding: '4px 10px', borderRadius: '20px', border: '1px solid #FF9900' }}>{c.name}</span>
-            ))}
-          </div>
-        )}
-
-        <div style={{ width: '100%', position: 'relative', height: '300px', marginBottom: '24px' }}>
-          {next && (
-            <div style={{ position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', transform: 'scale(0.95) translateY(8px)', zIndex: 0 }} />
-          )}
-          <SwipeCard onSwipe={handleSwipe} animating={animating}>
-            <div style={{
-              position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', overflow: 'hidden',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '32px',
-            }}>
-              <div style={{ fontSize: '72px', pointerEvents: 'none' }}>{current?.emoji}</div>
-              <div style={{ fontSize: '26px', fontWeight: '700', textAlign: 'center', color: '#0F1111', pointerEvents: 'none' }}>{current?.name}</div>
-              <div style={{ fontSize: '13px', color: '#565959', textAlign: 'center', lineHeight: 1.6, pointerEvents: 'none' }}>{current?.desc}</div>
+        <div style={{ padding: '0 16px' }}>
+          {genres.map(genre => (
+            <div key={genre} style={{ marginBottom: '24px' }}>
+              {genres.length > 1 && (
+                <div style={{ fontSize: '13px', fontWeight: '700', color: '#FF9900', marginBottom: '10px', paddingLeft: '4px' }}>
+                  {genre}
+                </div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {(categories[genre] ?? []).map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelect({ name: item.name, genre })}
+                    style={{
+                      background: '#fff',
+                      border: '1px solid #DDD',
+                      borderRadius: '14px',
+                      padding: '16px 20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '16px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <div style={{ fontSize: '36px', flexShrink: 0 }}>{item.emoji}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '16px', fontWeight: '700', color: '#0F1111' }}>{item.name}</div>
+                      <div style={{ fontSize: '12px', color: '#888', marginTop: '3px' }}>{item.desc}</div>
+                    </div>
+                    <div style={{ fontSize: '20px', color: '#FF9900', flexShrink: 0 }}>→</div>
+                  </button>
+                ))}
+              </div>
             </div>
-          </SwipeCard>
+          ))}
         </div>
-
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button onClick={() => handleSwipe('left')} style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px solid #DDD', background: '#fff', fontSize: '26px', color: '#565959', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>✕</button>
-          <button onClick={() => handleSwipe('right')} style={{ width: '72px', height: '72px', borderRadius: '50%', border: 'none', background: '#FFD814', fontSize: '28px', color: '#0F1111', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>♥</button>
-        </div>
-
-        <div style={{ marginTop: '16px', fontSize: '12px', color: '#888' }}>← 興味なし ／ 興味あり →</div>
       </main>
     </>
   )
