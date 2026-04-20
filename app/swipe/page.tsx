@@ -236,14 +236,21 @@ function SwipeContent() {
     }, 320)
   }, [animating, current, index, items.length])
 
-  // タッチ・マウスイベントをuseEffectで直接DOM登録
+  // animatingをrefで管理してuseEffectの再登録を防ぐ
+  const animatingRef = useRef(false)
+  const dragOffsetRef = useRef({ x: 0, y: 0 })
+
+  useEffect(() => {
+    animatingRef.current = !!animating
+  }, [animating])
+
   useEffect(() => {
     const card = cardRef.current
     if (!card) return
 
     const onTouchStart = (e: TouchEvent) => {
       e.preventDefault()
-      if (animating) return
+      if (animatingRef.current) return
       const t = e.touches[0]
       dragStart.current = { x: t.clientX, y: t.clientY }
       isDragging.current = true
@@ -252,22 +259,20 @@ function SwipeContent() {
       e.preventDefault()
       if (!isDragging.current || !dragStart.current) return
       const t = e.touches[0]
-      setDragOffset({
+      const offset = {
         x: t.clientX - dragStart.current.x,
         y: t.clientY - dragStart.current.y,
-      })
+      }
+      dragOffsetRef.current = offset
+      setDragOffset({ ...offset })
     }
     const onTouchEnd = () => {
       if (!isDragging.current) return
       isDragging.current = false
-      setDragOffset(prev => {
-        setTimeout(() => {
-          if (prev.x > 80) handleSwipe('right')
-          else if (prev.x < -80) handleSwipe('left')
-          else setDragOffset({ x: 0, y: 0 })
-        }, 0)
-        return prev
-      })
+      const x = dragOffsetRef.current.x
+      if (x > 80) handleSwipe('right')
+      else if (x < -80) handleSwipe('left')
+      else setDragOffset({ x: 0, y: 0 })
       dragStart.current = null
     }
 
@@ -280,7 +285,7 @@ function SwipeContent() {
       card.removeEventListener('touchmove', onTouchMove)
       card.removeEventListener('touchend', onTouchEnd)
     }
-  }, [animating, handleSwipe])
+  }, [handleSwipe])
 
   const getCardTransform = () => {
     if (animating === 'right') return 'translateX(150%) rotate(25deg)'
