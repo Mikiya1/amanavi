@@ -75,9 +75,15 @@ function CategoryContent() {
       setAnimating(null)
       if (index + 1 >= allItems.length) {
         const selected = dir === 'right' ? newLiked : likedCategories
-        const category = selected.length > 0 ? selected[0].name : allItems[0].name
-        const genre = selected.length > 0 ? selected[0].genre : genres[0]
-        router.push(`/swipe?genre=${genre}&category=${category}`)
+        if (selected.length === 0) {
+          // 全部スキップなら最初のカテゴリへ
+          router.push(`/swipe?genre=${genres[0]}&categories=${allItems[0].name}`)
+        } else {
+          // LIKEした全カテゴリをカンマ区切りで渡す
+          const categoryNames = selected.map(c => c.name).join(',')
+          const genre = selected[0].genre
+          router.push(`/swipe?genre=${genre}&categories=${categoryNames}`)
+        }
       } else {
         setIndex(prev => prev + 1)
       }

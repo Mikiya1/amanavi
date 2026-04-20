@@ -193,20 +193,23 @@ const products: Record<string, { id: number; name: string; price: string; rating
 function RecommendContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const category = searchParams.get('category') ?? 'スマホ'
   const genre = searchParams.get('genre') ?? 'ガジェット'
+  const categoriesParam = searchParams.get('categories') ?? searchParams.get('category') ?? 'スマホ'
+  const categoryList = categoriesParam.split(',')
   const tagsParam = searchParams.get('tags') ?? ''
   const likedTags = tagsParam ? tagsParam.split(',') : []
-  const items = products[category] ?? products['スマホ']
 
-  const scored = items.map(item => ({
+  // 全LIKEカテゴリの商品をまとめて取得
+  const allItems = categoryList.flatMap(cat => products[cat] ?? [])
+
+  const scored = allItems.map(item => ({
     ...item,
     score: item.tags.filter(t => likedTags.includes(t)).length,
   })).sort((a, b) => b.score - a.score)
 
   const reason = likedTags.length > 0
     ? `${[...new Set(likedTags)].slice(0, 3).join('・')}に興味があるあなたへ`
-    : `${genre} / ${category}のおすすめ商品です`
+    : `${genre} / ${categoryList.join('・')}のおすすめ商品です`
 
   return (
     <>

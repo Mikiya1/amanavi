@@ -208,7 +208,9 @@ function SwipeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const genre = searchParams.get('genre') ?? 'ガジェット'
-  const category = searchParams.get('category') ?? 'スマホ'
+  const categoriesParam = searchParams.get('categories') ?? searchParams.get('category') ?? 'スマホ'
+  const categories = categoriesParam.split(',')
+  const category = categories[0] // 現在表示中のカテゴリ
   const items = products[category] ?? products['スマホ']
   const colors = categoryColors[category] ?? { from: '#1a1a2e', to: '#0f3460' }
 
@@ -322,7 +324,7 @@ function SwipeContent() {
             </div>
           </div>
           <button
-            onClick={() => router.push(`/recommend?genre=${genre}&category=${category}&tags=${[...new Set(likedTags)].join(',')}`)}
+            onClick={() => router.push(`/recommend?genre=${genre}&categories=${categoriesParam}&tags=${[...new Set(likedTags)].join(',')}`)}
             style={{ background: '#FFD814', color: '#0F1111', border: 'none', borderRadius: '12px', padding: '16px', fontSize: '16px', fontWeight: '700', width: '100%', cursor: 'pointer' }}
           >
             おすすめを見る →
