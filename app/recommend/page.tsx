@@ -214,43 +214,107 @@ function RecommendContent() {
   return (
     <>
       <Header />
-      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', padding: '16px', maxWidth: '480px', margin: '0 auto' }}>
+      <main style={{ background: '#F3F3F3', minHeight: '100vh', color: '#0F1111', fontFamily: 'sans-serif', maxWidth: '480px', margin: '0 auto', paddingBottom: '40px' }}>
 
-        <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px' }}>おすすめ商品</h2>
-
-        <div style={{ background: '#FFF3CD', border: '1px solid #FF9900', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', color: '#0F1111', marginBottom: '16px' }}>
-          💡 {reason}
+        {/* ヒーローバナー */}
+        <div style={{ background: '#131921', padding: '20px 16px 24px', marginBottom: '16px' }}>
+          <div style={{ fontSize: '12px', color: '#FF9900', fontWeight: '700', marginBottom: '6px' }}>診断結果</div>
+          <div style={{ fontSize: '20px', fontWeight: '700', color: '#fff', marginBottom: '8px' }}>あなたへのおすすめ</div>
+          <div style={{ background: 'rgba(255,216,20,0.15)', border: '1px solid rgba(255,216,20,0.4)', borderRadius: '8px', padding: '10px 12px', fontSize: '13px', color: '#FFD814' }}>
+            💡 {reason}
+          </div>
+          {likedTags.length > 0 && (
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '10px' }}>
+              {[...new Set(likedTags)].map(tag => (
+                <span key={tag} style={{ background: 'rgba(255,153,0,0.2)', color: '#FF9900', fontSize: '11px', padding: '3px 10px', borderRadius: '20px', border: '1px solid rgba(255,153,0,0.4)' }}>{tag}</span>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
+        {/* 商品リスト */}
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
           {scored.map((item, i) => (
-            <div key={item.id} style={{ background: '#ffffff', borderRadius: '8px', overflow: 'hidden', border: i === 0 ? '2px solid #FF9900' : '1px solid #DDD', position: 'relative' }}>
+            <div
+              key={`${item.id}-${i}`}
+              style={{
+                background: '#fff',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: i === 0 ? '2px solid #FF9900' : '1px solid #DDD',
+                boxShadow: i === 0 ? '0 4px 16px rgba(255,153,0,0.15)' : '0 1px 4px rgba(0,0,0,0.05)',
+              }}
+            >
+              {/* ベストマッチバッジ */}
               {i === 0 && (
-                <div style={{ background: '#FF9900', color: '#fff', fontSize: '11px', padding: '3px 10px', fontWeight: '700', textAlign: 'center' }}>
-                  ★ ベストマッチ
+                <div style={{ background: 'linear-gradient(90deg, #FF9900, #FFB700)', color: '#fff', fontSize: '12px', padding: '5px 12px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  ★ あなたへのベストマッチ
                 </div>
               )}
+              {i === 1 && (
+                <div style={{ background: '#F3F3F3', color: '#565959', fontSize: '11px', padding: '4px 12px', fontWeight: '600' }}>
+                  2位
+                </div>
+              )}
+              {i === 2 && (
+                <div style={{ background: '#F3F3F3', color: '#565959', fontSize: '11px', padding: '4px 12px', fontWeight: '600' }}>
+                  3位
+                </div>
+              )}
+
               <div style={{ display: 'flex', alignItems: 'stretch' }}>
-                <div style={{ width: '100px', minHeight: '100px', background: '#F3F3F3', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
+                {/* 絵文字エリア */}
+                <div style={{
+                  width: '110px', minHeight: '110px', flexShrink: 0,
+                  background: i === 0 ? 'linear-gradient(135deg, #FFF8E7, #FFF3CD)' : '#F8F8F8',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '48px',
+                }}>
                   {item.emoji}
                 </div>
-                <div style={{ flex: 1, padding: '12px', minWidth: 0 }}>
-                  <div style={{ fontSize: '14px', fontWeight: '700', lineHeight: 1.4, color: '#0F1111' }}>{item.name}</div>
-                  <div style={{ fontSize: '18px', color: '#B12704', marginTop: '4px', fontWeight: '700' }}>{item.price}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                    <span style={{ color: '#FF9900', fontSize: '12px' }}>★</span>
-                    <span style={{ fontSize: '12px', color: '#565959' }}>{item.rating}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
-                    {item.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: '11px', color: '#565959', background: '#F3F3F3', padding: '2px 8px', borderRadius: '4px', border: '1px solid #DDD' }}>{tag}</span>
-                    ))}
+
+                {/* 商品情報 */}
+                <div style={{ flex: 1, padding: '12px 14px', minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: '700', lineHeight: 1.4, color: '#0F1111' }}>{item.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginTop: '4px' }}>
+                      <span style={{ fontSize: '20px', color: '#B12704', fontWeight: '700' }}>{item.price}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                      {'★★★★★'.slice(0, Math.round(parseFloat(item.rating))).split('').map((_, si) => (
+                        <span key={si} style={{ color: '#FF9900', fontSize: '12px' }}>★</span>
+                      ))}
+                      <span style={{ fontSize: '12px', color: '#565959', marginLeft: '2px' }}>{item.rating}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
+                      {item.tags.map(tag => (
+                        <span key={tag} style={{
+                          fontSize: '11px',
+                          color: likedTags.includes(tag) ? '#FF9900' : '#565959',
+                          background: likedTags.includes(tag) ? '#FFF3CD' : '#F3F3F3',
+                          padding: '2px 8px', borderRadius: '4px',
+                          border: likedTags.includes(tag) ? '1px solid #FF9900' : '1px solid #DDD',
+                          fontWeight: likedTags.includes(tag) ? '700' : '400',
+                        }}>{tag}</span>
+                      ))}
+                    </div>
                   </div>
                   <button
                     onClick={() => window.open(item.url, '_blank')}
-                    style={{ marginTop: '8px', background: '#FFD814', color: '#0F1111', border: 'none', borderRadius: '4px', padding: '6px 16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', width: '100%' }}
+                    style={{
+                      marginTop: '10px',
+                      background: i === 0 ? '#FFD814' : '#fff',
+                      color: '#0F1111',
+                      border: i === 0 ? 'none' : '1px solid #DDD',
+                      borderRadius: '6px',
+                      padding: '8px',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      width: '100%',
+                    }}
                   >
-                    Amazonで見る
+                    🛒 Amazonで見る
                   </button>
                 </div>
               </div>
@@ -258,12 +322,14 @@ function RecommendContent() {
           ))}
         </div>
 
-        <button
-          onClick={() => router.push('/genre')}
-          style={{ width: '100%', background: '#ffffff', color: '#0F1111', border: '1px solid #DDD', borderRadius: '8px', padding: '12px', fontSize: '14px', cursor: 'pointer', fontWeight: '700' }}
-        >
-          もう一度診断する
-        </button>
+        <div style={{ padding: '0 16px' }}>
+          <button
+            onClick={() => router.push('/genre')}
+            style={{ width: '100%', background: '#131921', color: '#fff', border: 'none', borderRadius: '10px', padding: '14px', fontSize: '14px', cursor: 'pointer', fontWeight: '700' }}
+          >
+            もう一度診断する
+          </button>
+        </div>
       </main>
     </>
   )
