@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Header from '../components/Header'
+import SwipeCard from '../components/SwipeCard'
 
 const categories: Record<string, { id: number; name: string; emoji: string; desc: string }[]> = {
   'ガジェット': [
@@ -80,13 +81,7 @@ function CategoryContent() {
       } else {
         setIndex(prev => prev + 1)
       }
-    }, 280)
-  }
-
-  const getCardTransform = () => {
-    if (animating === 'right') return 'translateX(120%) rotate(15deg)'
-    if (animating === 'left') return 'translateX(-120%) rotate(-15deg)'
-    return 'none'
+    }, 320)
   }
 
   return (
@@ -119,37 +114,26 @@ function CategoryContent() {
 
         <div style={{ width: '100%', position: 'relative', height: '300px', marginBottom: '24px' }}>
           {next && (
-            <div style={{ position: 'absolute', inset: 0, background: '#ffffff', border: '1px solid #DDD', borderRadius: '12px', transform: 'scale(0.95) translateY(8px)', zIndex: 0 }} />
+            <div style={{ position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', transform: 'scale(0.95) translateY(8px)', zIndex: 0 }} />
           )}
-          <div style={{
-            position: 'absolute', inset: 0, background: '#ffffff', border: '1px solid #DDD', borderRadius: '12px', overflow: 'hidden', zIndex: 1,
-            transform: getCardTransform(),
-            transition: animating ? 'transform 0.28s ease' : 'none',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '32px',
-          }}>
-            <div style={{ fontSize: '72px' }}>{current?.emoji}</div>
-            <div style={{ fontSize: '26px', fontWeight: '700', textAlign: 'center', color: '#0F1111' }}>{current?.name}</div>
-            <div style={{ fontSize: '13px', color: '#565959', textAlign: 'center', lineHeight: 1.6 }}>{current?.desc}</div>
-          </div>
+          <SwipeCard onSwipe={handleSwipe} animating={animating}>
+            <div style={{
+              position: 'absolute', inset: 0, background: '#fff', border: '1px solid #DDD', borderRadius: '16px', overflow: 'hidden',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '32px',
+            }}>
+              <div style={{ fontSize: '72px', pointerEvents: 'none' }}>{current?.emoji}</div>
+              <div style={{ fontSize: '26px', fontWeight: '700', textAlign: 'center', color: '#0F1111', pointerEvents: 'none' }}>{current?.name}</div>
+              <div style={{ fontSize: '13px', color: '#565959', textAlign: 'center', lineHeight: 1.6, pointerEvents: 'none' }}>{current?.desc}</div>
+            </div>
+          </SwipeCard>
         </div>
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <button
-            onClick={() => handleSwipe('left')}
-            style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px solid #DDD', background: '#ffffff', fontSize: '26px', color: '#565959', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            ✕
-          </button>
-          <button
-            onClick={() => handleSwipe('right')}
-            style={{ width: '72px', height: '72px', borderRadius: '50%', border: 'none', background: '#FFD814', fontSize: '28px', color: '#0F1111', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-          >
-            ♥
-          </button>
+          <button onClick={() => handleSwipe('left')} style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px solid #DDD', background: '#fff', fontSize: '26px', color: '#565959', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>✕</button>
+          <button onClick={() => handleSwipe('right')} style={{ width: '72px', height: '72px', borderRadius: '50%', border: 'none', background: '#FFD814', fontSize: '28px', color: '#0F1111', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>♥</button>
         </div>
 
         <div style={{ marginTop: '16px', fontSize: '12px', color: '#888' }}>← 興味なし ／ 興味あり →</div>
-
       </main>
     </>
   )
