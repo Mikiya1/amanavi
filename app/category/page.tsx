@@ -161,7 +161,7 @@ function CategoryContent() {
         const selected = dir === 'right' ? newLiked : likedCategories
         if (selected.length === 0) {
           // 全部スキップなら最初のカテゴリへ
-          router.push(`/swipe?genre=${genres[0]}&categories=${allItems[0].name}`)
+          router.push(`/refine?genre=${genres[0]}&category=${allItems[0].name}`)
         } else {
           // LIKEした全カテゴリをカンマ区切りで渡す
           const categoryNames = selected.map(c => c.name).join(',')
