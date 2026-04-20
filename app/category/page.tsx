@@ -164,9 +164,9 @@ function CategoryContent() {
           router.push(`/refine?genre=${genres[0]}&category=${allItems[0].name}`)
         } else {
           // LIKEした全カテゴリをカンマ区切りで渡す
-          const categoryNames = selected.map(c => c.name).join(',')
+          const category = selected[0].name
           const genre = selected[0].genre
-          router.push(`/swipe?genre=${genre}&categories=${categoryNames}`)
+          router.push(`/refine?genre=${genre}&category=${category}`)
         }
       } else {
         setIndex(prev => prev + 1)
