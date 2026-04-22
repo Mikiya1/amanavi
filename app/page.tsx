@@ -87,6 +87,20 @@ export default function Home() {
           ))}
         </div>
 
+        {/* おすすめリストバナー */}
+        <div style={{ padding: '0 16px', marginBottom: '24px' }}>
+          <a href="/wishlist" style={{ textDecoration: 'none' }}>
+            <div style={{ background: 'linear-gradient(90deg, #131921, #1e3a5f)', borderRadius: '14px', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: '#FF9900', fontWeight: '700', marginBottom: '4px' }}>PICK UP</div>
+                <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff' }}>おすすめ商品リスト</div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>厳選した気になる商品を見る</div>
+              </div>
+              <div style={{ fontSize: '32px' }}>🛒</div>
+            </div>
+          </a>
+        </div>
+
         {/* ジャンルから探す */}
         <div style={{ padding: '0 16px', marginBottom: '28px' }}>
           <div style={{ fontSize: '16px', fontWeight: '800', marginBottom: '12px', color: '#0F1111', letterSpacing: '-0.3px' }}>
