@@ -16,6 +16,11 @@ const items: { name: string; category: string; url: string }[] = [
     category: 'カメラ',
     url: 'https://amzn.to/4cWg4hU',
   },
+  {
+    name: 'anan(アンアン)2026/05/20号 No.2495増刊 スペシャルエディション[Black onyX]',
+    category: '本・雑誌',
+    url: 'https://amzn.to/4cZS0K4',
+  },
 ]
 
 export default function WishlistPage() {
