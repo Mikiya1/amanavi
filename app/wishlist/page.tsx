@@ -31,6 +31,11 @@ const items: { name: string; category: string; url: string }[] = [
     category: 'ペット',
     url: 'https://amzn.to/4dmyzwa',
   },
+  {
+    name: '猫砂マット 猫用トイレマット 二重EVA 滑り止め 防水 飛び散り防止 臭さ防止 ハニカムデザイン 掃除簡単 高耐久 四季適用（60*45cm ベージュ）',
+    category: 'ペット',
+    url: 'https://amzn.to/4dkWzzP',
+  },
 ]
 
 export default function WishlistPage() {
