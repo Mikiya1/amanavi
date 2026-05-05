@@ -26,6 +26,11 @@ const items: { name: string; category: string; url: string }[] = [
     category: 'ファッション小物',
     url: 'https://amzn.to/4w9qSkv',
   },
+  {
+    name: 'ジェックス ピュアクリスタル 純正 軟水化フィルター 全円 猫用 4個入 純正 活性炭+イオニック 下部尿路の健康維持',
+    category: 'ペット',
+    url: 'https://amzn.to/4dmyzwa',
+  },
 ]
 
 export default function WishlistPage() {
