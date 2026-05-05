@@ -21,6 +21,11 @@ const items: { name: string; category: string; url: string }[] = [
     category: '本・雑誌',
     url: 'https://amzn.to/4cZS0K4',
   },
+  {
+    name: '【形状記憶・3秒ととのえる】日傘 UVカット率100% スマートセーフティロック ワンタッチ自動開閉 折り畳み 超軽量 完全遮光 UPF50+ 晴雨兼用',
+    category: 'ファッション小物',
+    url: 'https://amzn.to/4w9qSkv',
+  },
 ]
 
 export default function WishlistPage() {
